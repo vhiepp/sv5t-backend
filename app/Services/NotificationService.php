@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Post;
 use App\Helpers\Base64;
 
-class BlogService {
+class NotificationService {
 
 
     public static function getList($paginate = 5, $userId = null, $order = 'new', $active = 'active') {
@@ -25,8 +25,9 @@ class BlogService {
                 $ac = 1;
                 break;
         }
+
         $results = Post::where('active', $ac)
-                        ->where('type', 'blogs');
+                        ->where('type', 'notification');
         
         if ($userId) {
             $id = Base64::id_decode($userId);
@@ -34,21 +35,18 @@ class BlogService {
         }
 
         $od = "desc";
-        if ($order) {
-
-            switch ($order) {
-                case 'new':
-                    $od = "desc";
-                    break;
-                case 'old':
-                    $od = "asc";
-                    break;
-                default:
-                    $od = "desc";
-                    break;
-            }
-
+        switch ($order) {
+            case 'new':
+                $od = "desc";
+                break;
+            case 'old':
+                $od = "asc";
+                break;
+            default:
+                $od = "desc";
+                break;
         }
+
         $results = $results->orderBy('created_at', $od);
 
         return $results->select(
@@ -68,7 +66,7 @@ class BlogService {
         
         if ($slug) {
             $result = Post::where('active', 1)
-                        ->where('type', 'blogs')
+                        ->where('type', 'notification')
                         ->where('slug', $slug);
 
             return $result

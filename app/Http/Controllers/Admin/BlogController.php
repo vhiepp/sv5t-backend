@@ -94,4 +94,13 @@ class BlogController extends Controller
     {
         //
     }
+
+    public function pendingCout() {
+        $count = Post::where('type', 'blogs')
+                    ->where('active', 0)
+                    ->count();
+        return response([
+            'count' => $count,
+        ]);
+    }
 }

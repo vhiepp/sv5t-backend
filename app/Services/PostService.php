@@ -9,7 +9,24 @@ class PostService {
 
     public function get($data) {
 
-        $results = Post::where('active', 1);
+        $ac = 1;
+        switch ($data['active']) {
+            case 'active':
+                $ac = 1;
+                break;
+            case 'wait':
+                $ac = 0;
+                break;
+            case 'deleted':
+                $ac = -1;
+                break;
+            
+            default:
+                $ac = 1;
+                break;
+        }
+
+        $results = Post::where('active', $ac);
 
         if ($data['type']) {
             $results = $results->where('type', $data['type']);

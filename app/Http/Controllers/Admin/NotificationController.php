@@ -93,4 +93,13 @@ class NotificationController extends Controller
     {
         //
     }
+
+    public function pendingCout() {
+        $count = Post::where('type', 'notification')
+                    ->where('active', 0)
+                    ->count();
+        return response([
+            'count' => $count,
+        ]);
+    }
 }

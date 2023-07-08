@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\BlogService;
+use App\Services\NotificationService;
 use App\Helpers\Base64;
 use App\Helpers\DateHelper;
 
-class BlogController extends Controller
+class NotificationController extends Controller
 {
+    protected $notificationService;
 
-    protected $blogService;
-
-    public function __construct(BlogService $blogService) {
-        $this->blogService = $blogService;
+    public function __construct(NotificationService $notificationService) {
+        $this->notificationService = $notificationService;
     }
 
     public function getList(Request $request) {
@@ -22,7 +21,7 @@ class BlogController extends Controller
 
             $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
 
-            $results = $this->blogService->getList($paginate, $request->input('user_id'), $request->input('order'), $request->input('active'));
+            $results = $this->notificationService->getList($paginate, $request->input('user_id'), $request->input('order'), $request->input('active'));
 
             foreach ($results as $index => $result) {
                 $result->user;
@@ -63,7 +62,7 @@ class BlogController extends Controller
 
     public function getBySlug(Request $request) {
         
-        $result = $this->blogService->getBySlug(
+        $result = $this->notificationService->getBySlug(
             $request->input('slug')
         );
 
@@ -96,60 +95,5 @@ class BlogController extends Controller
                 'msg_vi' => 'Có thể lỗi do sai dữ liệu tham số truyền vào'
             ], 500);
         }
-    }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

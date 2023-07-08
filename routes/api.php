@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,11 +49,15 @@ Route::middleware('api')->group(function () {
 
                 Route::post('create', [\App\Http\Controllers\Admin\BlogController::class, 'store']);
 
+                Route::post('pending-count', [\App\Http\Controllers\Admin\BlogController::class, 'pendingCout']);
+
             });
 
             Route::prefix('notification')->group(function () {
 
                 Route::post('create', [\App\Http\Controllers\Admin\NotificationController::class, 'store']);
+
+                Route::post('pending-count', [\App\Http\Controllers\Admin\NotificationController::class, 'pendingCout']);
 
             });
 
@@ -69,6 +74,10 @@ Route::middleware('api')->group(function () {
     // get blogs list 
     Route::post('blogs', [BlogController::class, 'getList']);
     Route::post('blog', [BlogController::class, 'getBySlug']);
+
+    // get notification list 
+    Route::post('notifications', [NotificationController::class, 'getList']);
+    Route::post('notification', [NotificationController::class, 'getBySlug']);
 
 
     Route::post('upload', [\App\Http\Controllers\Admin\FileController::class, 'upload']);

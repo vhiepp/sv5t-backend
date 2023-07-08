@@ -26,6 +26,7 @@ class PostController extends Controller
                 'user_id' => $request->input('user_id'),
                 'type' => $request->input('type'),
                 'order' => $request->input('order'),
+                'active' => $request->input('active')
             ]);
     
             foreach ($results as $index => $result) {
