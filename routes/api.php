@@ -79,10 +79,7 @@ Route::middleware('api')->group(function () {
     Route::post('notifications', [NotificationController::class, 'getList']);
     Route::post('notification', [NotificationController::class, 'getBySlug']);
 
-
     Route::post('upload', [\App\Http\Controllers\Admin\FileController::class, 'upload']);
     Route::delete('upload', [\App\Http\Controllers\Admin\FileController::class, 'delete']);
-    
-
     
 });

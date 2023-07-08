@@ -19,6 +19,7 @@ use App\Helpers\DateHelper;
 Route::get('/', function () {
 
 
-  dd(DateHelper::make('2023-06-21 03:14:22'));
+  // dd(DateHelper::make('2023-06-21 03:14:22'));
+  dd(\Hash::make('Kaka456$%^'));
 
 });

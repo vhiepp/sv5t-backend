@@ -84,6 +84,9 @@ class NotificationController extends Controller
         unset($result['user']);
         unset($result['user_id']);
 
+        $result['created_time'] = DateHelper::make($result['created_time']);
+        $result['updated_time'] = DateHelper::make($result['updated_time']);
+
         return response($result);
         try {
             
