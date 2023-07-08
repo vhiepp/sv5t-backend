@@ -80,8 +80,8 @@ class BlogService {
                         'active',
                         'type',
                         'user_id',
-                        'created_at',
-                        'updated_at',
+                        'created_at as created_time',
+                        'updated_at as updated_time',
                     )
                     ->get()[0];
         }
