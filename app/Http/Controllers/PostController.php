@@ -3,28 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\PostService;
+use App\Services\ForumService;
 use App\Helpers\Base64;
 use App\Helpers\DateHelper;
 
 class PostController extends Controller
 {
 
-    protected $postService;
+    protected $forumService;
 
-    public function __construct(PostService $postService) {
-        $this->postService = $postService;
+    public function __construct(ForumService $forumService) {
+        $this->forumService = $forumService;
     }
 
-    public function get(Request $request) {
+    public function getList(Request $request) {
         
         try {
             $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
     
-            $results = $this->postService->get([
+            $results = $this->forumService->get([
                 'paginate' => $paginate,
                 'user_id' => $request->input('user_id'),
-                'type' => $request->input('type'),
+                'type' => 'post',
                 'order' => $request->input('order'),
                 'active' => $request->input('active')
             ]);
@@ -66,7 +66,7 @@ class PostController extends Controller
     }
 
     public function getBySlug(Request $request) {
-        $result = $this->postService->getBySlug(
+        $result = $this->forumService->getBySlug(
             $request->input('slug')
         );
 

@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\NotificationController;
 
 /*
@@ -42,25 +42,28 @@ Route::middleware('api')->group(function () {
             });
 
         });
-
-        Route::prefix('post')->group(function () {
-
-            Route::prefix('blogs')->group(function () {
-
-                Route::post('create', [\App\Http\Controllers\Admin\BlogController::class, 'store']);
-
-                Route::post('pending-count', [\App\Http\Controllers\Admin\BlogController::class, 'pendingCout']);
-
+        Route::middleware('auth.admin.login')->group(function () {
+            Route::prefix('forum')->group(function () {
+    
+                Route::prefix('posts')->group(function () {
+    
+                    Route::post('create', [\App\Http\Controllers\Admin\PostController::class, 'store']);
+                    Route::post('update', [\App\Http\Controllers\Admin\PostController::class, 'update']);
+    
+                    Route::post('pending-count', [\App\Http\Controllers\Admin\PostController::class, 'pendingCout']);
+    
+                });
+    
+                Route::prefix('notifications')->group(function () {
+    
+                    Route::post('create', [\App\Http\Controllers\Admin\NotificationController::class, 'store']);
+                    Route::post('update', [\App\Http\Controllers\Admin\NotificationController::class, 'update']);
+    
+                    Route::post('pending-count', [\App\Http\Controllers\Admin\NotificationController::class, 'pendingCout']);
+    
+                });
+    
             });
-
-            Route::prefix('notification')->group(function () {
-
-                Route::post('create', [\App\Http\Controllers\Admin\NotificationController::class, 'store']);
-
-                Route::post('pending-count', [\App\Http\Controllers\Admin\NotificationController::class, 'pendingCout']);
-
-            });
-
         });
 
         
@@ -68,12 +71,9 @@ Route::middleware('api')->group(function () {
     });
     // end admin api
     
-    Route::post('posts', [PostController::class, 'get']);
+    // get post list 
+    Route::post('posts', [PostController::class, 'getList']);
     Route::post('post', [PostController::class, 'getBySlug']);
-
-    // get blogs list 
-    Route::post('blogs', [BlogController::class, 'getList']);
-    Route::post('blog', [BlogController::class, 'getBySlug']);
 
     // get notification list 
     Route::post('notifications', [NotificationController::class, 'getList']);
@@ -81,5 +81,20 @@ Route::middleware('api')->group(function () {
 
     Route::post('upload', [\App\Http\Controllers\Admin\FileController::class, 'upload']);
     Route::delete('upload', [\App\Http\Controllers\Admin\FileController::class, 'delete']);
+
+    Route::prefix('authen')->group(function () {
+        Route::post('signin', [AuthController::class, 'signin']);
+
+        Route::prefix('microsoft')->group(function () {
+            Route::post('url', [AuthController::class, 'microsoftGetUrl']);
+            Route::post('callback', [AuthController::class, 'microsoftSignin']);
+        });
+
+        Route::middleware('auth.signin')->group(function () {
+            Route::post('user', [AuthController::class, 'user']);
+            Route::post('signout', [AuthController::class, 'signout']);
+        });
+
+    });
     
 });

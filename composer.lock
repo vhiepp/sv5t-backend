@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e20374d707fe9230bd0d38923166176",
+    "content-hash": "29e84f384b471164ae9e2f9d12c0a167",
     "packages": [
+        {
+            "name": "adnanhussainturki/microsoft-api-php",
+            "version": "0.03",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AdnanHussainTurki/microsoft-api-php.git",
+                "reference": "1d38a17e1507287c6b03301656ed7b8c235246ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AdnanHussainTurki/microsoft-api-php/zipball/1d38a17e1507287c6b03301656ed7b8c235246ac",
+                "reference": "1d38a17e1507287c6b03301656ed7b8c235246ac",
+                "shasum": ""
+            },
+            "require": {
+                "microsoft/microsoft-graph": "^1.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "myPHPnotes\\Microsoft\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adnan Hussain Turki",
+                    "email": "adnanhussainturki@gmail.com",
+                    "homepage": "https://www.myphpnotes.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Wrapper the OneDrive API",
+            "homepage": "https://github.com/AdnanHussainTurki/microsoft-api-php",
+            "keywords": [
+                "OneDrive",
+                "api"
+            ],
+            "support": {
+                "issues": "https://github.com/AdnanHussainTurki/microsoft-api-php/issues",
+                "source": "https://github.com/AdnanHussainTurki/microsoft-api-php/tree/0.03"
+            },
+            "time": "2021-02-14T13:07:13+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
@@ -2190,6 +2241,58 @@
                 "source": "https://github.com/thephpleague/oauth1-client/tree/v1.10.1"
             },
             "time": "2022-04-15T14:02:14+00:00"
+        },
+        {
+            "name": "microsoft/microsoft-graph",
+            "version": "1.102.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/microsoftgraph/msgraph-sdk-php.git",
+                "reference": "4b450b06ac9df3868bbdbddb31bfcc4595f643bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/microsoftgraph/msgraph-sdk-php/zipball/4b450b06ac9df3868bbdbddb31bfcc4595f643bc",
+                "reference": "4b450b06ac9df3868bbdbddb31bfcc4595f643bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0 || ^7.0",
+                "php": "^8.0 || ^7.3",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "require-dev": {
+                "guzzlehttp/promises": "^1.0 || ^2.0",
+                "mikey179/vfsstream": "^1.2",
+                "phpstan/phpstan": "^0.12.90 || ^1.0.0",
+                "phpunit/phpunit": "^8.0 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Microsoft\\Graph\\": "src/",
+                    "Beta\\Microsoft\\Graph\\": "src/Beta/Microsoft/Graph/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Microsoft Graph Client Tooling",
+                    "email": "graphtooling@service.microsoft.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The Microsoft Graph SDK for PHP",
+            "homepage": "https://developer.microsoft.com/en-us/graph",
+            "support": {
+                "issues": "https://github.com/microsoftgraph/msgraph-sdk-php/issues",
+                "source": "https://github.com/microsoftgraph/msgraph-sdk-php/tree/1.102.0"
+            },
+            "time": "2023-07-05T13:07:19+00:00"
         },
         {
             "name": "monolog/monolog",

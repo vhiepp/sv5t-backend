@@ -4,11 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Post;
+use App\Models\Forum;
 use Illuminate\Support\Str;
+use App\Services\ForumService;
 
-class BlogController extends Controller
+class PostController extends Controller
 {
+    protected $forumService;
+
+    public function __construct(ForumService $forumService) {
+        $this->forumService = $forumService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -30,37 +36,16 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
             //code...
-            if ($request->input('thumbnail')) {
-                $path = env('APP_URL') . '/' . $request->input('thumbnail');
-            } else {
-                $folder = "uploads/" . date('Y/m/d');
-                $fileName = date('H-i') . '-' . $request->file('thumbnail')->getClientOriginalName();
-                $url = $request->file('thumbnail')->move($folder, $fileName);
-                $path = env('APP_URL') . '/' . $folder . '/' . $fileName;
-            }
-            
-            $content = Str::of($request->input('content'))->replace('"', "'");
-
-            Post::create([
-                'title' => $request->input('title'),
-                'content' => $content,
-                'thumb' => $path,
-                'active' => $request->input('postNow') ? 1 : 0,
-                'type' => 'blogs',
-                'user_id' => auth()->user()['id']
-            ]);
-            
+            $post = $this->forumService->create($request, 'post');
             return response([
-                'status' => 'success',
-                'msg' => 'Tạo bài viết thành công',
+                'status' => 'success'
             ]);
-
         } catch (\Throwable $th) {
-            
+            return response($th);
         }
+        
     }
 
     /**
@@ -82,9 +67,18 @@ class BlogController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            //code...
+            $post = $this->forumService->update($request);
+            return response([
+                'status' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response($th);
+        }
     }
 
     /**
@@ -96,7 +90,7 @@ class BlogController extends Controller
     }
 
     public function pendingCout() {
-        $count = Post::where('type', 'blogs')
+        $count = Forum::where('type', 'post')
                     ->where('active', 0)
                     ->count();
         return response([

@@ -12,6 +12,13 @@ class EncryptCookies extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
     ];
+
+    /**
+     * Decrypt the given cookie and return the value.
+     *
+     * @param  string  $name
+     * @param  string|array  $cookie
+     * @return string|array
+     */
 }

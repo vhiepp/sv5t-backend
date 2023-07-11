@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -29,10 +30,10 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (! $token = auth()->attempt($credentials) || auth()->user()['role'] != 'admin') {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
+        
         return $this->respondWithToken($token);
     }
 
@@ -68,7 +69,9 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json([
+            'user' => auth()->user(),
+        ]);
     }
 
     /**
@@ -79,8 +82,10 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
+        
+        $cookie = cookie()->forget('token');
 
-        return response()->json(['message' => 'Successfully logged out'], 200);
+        return response()->json(['message' => 'Successfully logged out'], 200)->cookie($cookie);
     }
 
     /**
@@ -102,11 +107,12 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $cookie = cookie('token', $token, 60);
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
-        ]);
+        ])->cookie($cookie);
     }
 }

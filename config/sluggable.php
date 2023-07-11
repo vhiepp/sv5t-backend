@@ -26,7 +26,7 @@ return [
      * want to make sure your slugs aren't too long.
      */
 
-    'maxLength' => 70,
+    'maxLength' => 100,
 
     /**
      * If you are setting a maximum length on your slugs, you may not want the
@@ -147,7 +147,7 @@ return [
      * Only set this to true if you understand the possible consequences.
      */
     
-    'onUpdate' => null,
+    'onUpdate' => true,
 
     /**
      * If the default slug engine of cocur/slugify is used, this array of

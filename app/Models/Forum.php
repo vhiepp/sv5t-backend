@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Cviebrock\EloquentSluggable\Sluggable;
 
-class Post extends Model
+class Forum extends Model
 {
     use HasFactory, Sluggable;
 
@@ -18,7 +18,8 @@ class Post extends Model
         'thumb',
         'active',
         'type',
-        'user_id'
+        'user_id',
+        'description'
     ];
 
     public function user(): BelongsTo
