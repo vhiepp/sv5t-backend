@@ -18,7 +18,7 @@ class AdminAuthMiddleware
         if (auth()->check() && auth()->user()['role'] == 'admin') {
             return $next($request);
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized'], 401); 
     }
 
     

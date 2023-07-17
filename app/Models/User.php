@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +32,7 @@ class User extends Authenticatable implements JWTSubject
         'provider_id',
         'role',
         'avatar',
+        'password'
     ];
 
     /**

@@ -16,11 +16,6 @@ use App\Http\Controllers\NotificationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::middleware('api')->group(function () {
 
     // admin api
@@ -48,7 +43,9 @@ Route::middleware('api')->group(function () {
                 Route::prefix('posts')->group(function () {
     
                     Route::post('create', [\App\Http\Controllers\Admin\PostController::class, 'store']);
+                    Route::post('active', [\App\Http\Controllers\Admin\PostController::class, 'active']);
                     Route::post('update', [\App\Http\Controllers\Admin\PostController::class, 'update']);
+                    Route::post('delete', [\App\Http\Controllers\Admin\PostController::class, 'destroy']);
     
                     Route::post('pending-count', [\App\Http\Controllers\Admin\PostController::class, 'pendingCout']);
     
@@ -57,7 +54,9 @@ Route::middleware('api')->group(function () {
                 Route::prefix('notifications')->group(function () {
     
                     Route::post('create', [\App\Http\Controllers\Admin\NotificationController::class, 'store']);
+                    Route::post('active', [\App\Http\Controllers\Admin\NotificationController::class, 'active']);
                     Route::post('update', [\App\Http\Controllers\Admin\NotificationController::class, 'update']);
+                    Route::post('delete', [\App\Http\Controllers\Admin\NotificationController::class, 'destroy']);
     
                     Route::post('pending-count', [\App\Http\Controllers\Admin\NotificationController::class, 'pendingCout']);
     

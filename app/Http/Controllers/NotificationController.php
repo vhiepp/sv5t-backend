@@ -17,42 +17,42 @@ class NotificationController extends Controller
 
     public function getList(Request $request) {
 
-        $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
-
-        $results = $this->forumService->get([
-            'paginate' => $paginate,
-            'user_id' => $request->input('user_id'),
-            'type' => 'notification',
-            'order' => $request->input('order'),
-            'active' => $request->input('active')
-        ]);
-
-        foreach ($results as $index => $result) {
-            $result->user;
-
-            $result['creator'] = [
-
-                'user_id' => Base64::id_encode($result['user']['id']),
-                'fullname' => $result['user']['fullname'],
-                'sur_name' => $result['user']['sur_name'],
-                'given_name' => $result['user']['given_name'],
-                'email' => $result['user']['email'],
-                'class' => $result['user']['class'],
-                'stu_code' => $result['user']['stu_code'],
-                'role' => $result['user']['role'],
-                'avatar' => $result['user']['avatar'],
-
-            ];
-
-            unset($result['user']);
-            unset($result['user_id']);
-
-            $result['created_time'] = DateHelper::make($result['created_time']);
-            $result['updated_time'] = DateHelper::make($result['updated_time']);
-        }
-        
-        return response($results);
         try {
+            $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
+    
+            $results = $this->forumService->get([
+                'paginate' => $paginate,
+                'user_id' => $request->input('user_id'),
+                'type' => 'notification',
+                'order' => $request->input('order'),
+                'active' => $request->input('active')
+            ]);
+    
+            foreach ($results as $index => $result) {
+                $result->user;
+    
+                $result['creator'] = [
+    
+                    'user_id' => Base64::id_encode($result['user']['id']),
+                    'fullname' => $result['user']['fullname'],
+                    'sur_name' => $result['user']['sur_name'],
+                    'given_name' => $result['user']['given_name'],
+                    'email' => $result['user']['email'],
+                    'class' => $result['user']['class'],
+                    'stu_code' => $result['user']['stu_code'],
+                    'role' => $result['user']['role'],
+                    'avatar' => $result['user']['avatar'],
+    
+                ];
+    
+                unset($result['user']);
+                unset($result['user_id']);
+    
+                $result['created_time'] = DateHelper::make($result['created_time']);
+                $result['updated_time'] = DateHelper::make($result['updated_time']);
+            }
+            
+            return response($results);
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -68,34 +68,34 @@ class NotificationController extends Controller
 
     public function getBySlug(Request $request) {
         
-        $result = $this->forumService->getBySlug(
-            $request->input('slug')
-        );
-
-        $result->user;
-        $result['creator'] = [
-
-            'user_id' => Base64::id_encode($result['user']['id']),
-            'fullname' => $result['user']['fullname'],
-            'sur_name' => $result['user']['sur_name'],
-            'given_name' => $result['user']['given_name'],
-            'email' => $result['user']['email'],
-            'class' => $result['user']['class'],
-            'stu_code' => $result['user']['stu_code'],
-            'role' => $result['user']['role'],
-            'avatar' => $result['user']['avatar'],
-
-        ];
-
-        unset($result['user']);
-        unset($result['user_id']);
-
-        $result['created_time'] = DateHelper::make($result['created_time']);
-        $result['updated_time'] = DateHelper::make($result['updated_time']);
-
-        return response($result);
         try {
             
+            $result = $this->forumService->getBySlug(
+                $request->input('slug')
+            );
+    
+            $result->user;
+            $result['creator'] = [
+    
+                'user_id' => Base64::id_encode($result['user']['id']),
+                'fullname' => $result['user']['fullname'],
+                'sur_name' => $result['user']['sur_name'],
+                'given_name' => $result['user']['given_name'],
+                'email' => $result['user']['email'],
+                'class' => $result['user']['class'],
+                'stu_code' => $result['user']['stu_code'],
+                'role' => $result['user']['role'],
+                'avatar' => $result['user']['avatar'],
+    
+            ];
+    
+            unset($result['user']);
+            unset($result['user_id']);
+    
+            $result['created_time'] = DateHelper::make($result['created_time']);
+            $result['updated_time'] = DateHelper::make($result['updated_time']);
+    
+            return response($result);
 
         } catch (\Throwable $th) {
             return \response([

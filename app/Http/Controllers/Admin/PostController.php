@@ -81,12 +81,49 @@ class PostController extends Controller
         }
     }
 
+    public function active(Request $request)
+    {
+        try {
+            $result = Forum::where('slug', $request->input('slug'))
+                ->where('type', 'post')
+                ->where('active', '<>', 1)
+                ->update([
+                    'active' => 1,
+                ]);
+            if ($result) {
+                return response([
+                    'status' => 'success'
+                ]);
+            }
+        } catch (\Throwable $th) {
+        }
+        return response([
+            'status' => 'error'
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $result = Forum::where('slug', $request->input('slug'))
+                ->where('type', 'post')
+                ->where('active', '<>', -1)
+                ->update([
+                    'active' => -1,
+                ]);
+            if ($result) {
+                return response([
+                    'status' => 'success'
+                ]);
+            }
+        } catch (\Throwable $th) {
+        }
+        return response([
+            'status' => 'error'
+        ]);
     }
 
     public function pendingCout() {

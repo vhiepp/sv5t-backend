@@ -47,9 +47,7 @@ class ForumService {
         if ($request->input('thumbnail')) {
             $data['thumb'] = $request->input('thumbnail');
         }
-        if ($request->input('postNow')) {
-            $data['active'] = $request->input('postNow') ? 1 : 0;
-        }
+        $data['active'] = $request->input('postNow') ? 1 : 0;
         if ($request->input('description')) {
             $data['description'] = $request->input('description');
         }
@@ -116,6 +114,7 @@ class ForumService {
             'type',
             'user_id',
             'description',
+            'content',
             'created_at as created_time',
             'updated_at as updated_time',
         )->paginate($paginate);

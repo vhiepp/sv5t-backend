@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -18,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'getGoogleUrl', 'googleLogin']]);
+        // $this->middleware('auth:api', ['except' => ['login', 'getGoogleUrl', 'googleLogin']]);
     }
 
     /**
@@ -29,11 +28,10 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials) || auth()->user()['role'] != 'admin') {
+        $token = auth('api')->attempt($credentials);
+        if (!$token || auth()->user()['role'] != 'admin') {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        
         return $this->respondWithToken($token);
     }
 

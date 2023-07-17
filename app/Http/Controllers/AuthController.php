@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -20,8 +21,8 @@ class AuthController extends Controller
     public function signin()
     {
         $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
+        $token = auth()->attempt($credentials);
+        if (!$token) {
             $emailStatus = User::where('email', $credentials['email'])->count() > 0 ? 1 : 4;
             $passwordStatus = $emailStatus == 1 ? 4 : 1;
 
@@ -98,28 +99,32 @@ class AuthController extends Controller
             $provider = 'microsoft';
     
             $user = User::where('provider', $provider)->where('provider_id', $userProvider->data->getId())->first();
-    
+                
             if (!$user) {
-                $user = new User();
-                $user->fullname = $userProvider->data->getDisplayName();
-                $user->sur_name = $userProvider->data->getSurname();
-                $user->given_name = $userProvider->data->getGivenName();
-                $user->email = $userProvider->data->getUserPrincipalName();
-                $user->password = \Hash::make(rand());
-                $user->phone = $userProvider->data->getMobilePhone();
-                $user->class = $userProvider->data->getJobTitle();
-                $user->role = 0;
-                $user->stu_code = $mssv;
-                $user->avatar = env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg';
-                $user->provider = $provider;
-                $user->provider_id = $userProvider->data->getId();
-                $user->save();
+                $user = User::create([
+                    'fullname' => $userProvider->data->getDisplayName(),
+                    'sur_name' => $userProvider->data->getSurname(),
+                    'given_name' => $userProvider->data->getGivenName(),
+                    'email' => $userProvider->data->getUserPrincipalName(),
+                    'password' => \Hash::make(rand()),
+                    'phone' => $userProvider->data->getMobilePhone(),
+                    'class' => $userProvider->data->getJobTitle(),
+                    'role' => 'user',
+                    'stu_code' => $mssv,
+                    'avatar' => env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg',
+                    'provider' => $provider,
+                    'provider_id' => $userProvider->data->getId()
+                ]);
+                $token = auth()->tokenById($user['id']);
             }
-            $token = auth()->tokenById($user->id);
+            if (empty($token)) {
+                $token = auth()->tokenById($user['id']);
+            }
             $cookie = cookie('token', $token, 60);
             return response([
+                'token' => $token,
                 'is_valid' => true,
-                'user' => auth()->user()
+                'user' => $user
             ])->cookie($cookie);
         } catch (\Throwable $th) {
             //throw $th;
