@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('thumb');
             $table->integer('active')->default(0);
             $table->string('type');
-            $table->string('description');
+            $table->longText('description')->nullable();
 
             $table->foreignId('user_id')->constrained(
                 table: 'users', indexName: 'forums_user_id'
