@@ -20,6 +20,6 @@ Route::get('/', function () {
 
 
   // dd(DateHelper::make('2023-06-21 03:14:22'));
-  dd(\Hash::make('Kaka456$%^'));
+  dd(\Hash::make('123456'));
 
 });

@@ -63,6 +63,11 @@ Route::middleware('api')->group(function () {
                 });
     
             });
+
+            Route::prefix('approval')->group(function () {
+                Route::post('create', [\App\Http\Controllers\Admin\ApprovalController::class, 'store']);
+                Route::post('get', [\App\Http\Controllers\Admin\ApprovalController::class, 'index']);
+            });
         });
 
         

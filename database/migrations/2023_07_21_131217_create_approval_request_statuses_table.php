@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('approval_request_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('approval_request_id')->constrained(
-                table: 'approval_requests', indexName: 'approval_request_id'
+                table: 'approval_requests', indexName: 'approval_request_status_with_id'
             );
             $table->foreignId('user_id')->constrained(
                 table: 'users', indexName: 'user_id_approved_request_approval'

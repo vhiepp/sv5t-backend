@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class ApprovalRequestStatus extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'approval_request_id',
+        'user_id',
+        'status',
+        'date_approved'
+    ];
 }

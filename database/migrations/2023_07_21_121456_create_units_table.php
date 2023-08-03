@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slogan')->nullable();
             $table->string('logo')->nullable();
-            $table->foreignId('user_id')->constrained(
+            $table->foreignId('leader_user_id')->constrained(
                 table: 'users', indexName: 'unit_leader_user_id'
             );
             $table->timestamps();
