@@ -8,6 +8,7 @@
         "php": "^8.1",
         "adnanhussainturki/microsoft-api-php": "^0.03.0",
         "cviebrock/eloquent-sluggable": "^10.0",
+        "grohiro/laravel-camelcase-json": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",

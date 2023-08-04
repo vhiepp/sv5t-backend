@@ -160,6 +160,7 @@ return [
          * Package Service Providers...
          */
         Cviebrock\EloquentSluggable\ServiceProvider::class,
+        // Grohiro\LaravelCamelCaseJson\CamelCaseJsonResponseServiceProvider::class,
 
         /*
          * Application Service Providers...

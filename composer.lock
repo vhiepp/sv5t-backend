@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "29e84f384b471164ae9e2f9d12c0a167",
+    "content-hash": "befce181ee33ca7b2ecf50463e004cec",
     "packages": [
         {
             "name": "adnanhussainturki/microsoft-api-php",
@@ -761,6 +761,37 @@
                 }
             ],
             "time": "2023-02-25T20:23:15+00:00"
+        },
+        {
+            "name": "grohiro/laravel-camelcase-json",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/grohiro/laravel-camelcase-json.git",
+                "reference": "6c4237cdc326b68608b59c041b9c343c845b1d9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/grohiro/laravel-camelcase-json/zipball/6c4237cdc326b68608b59c041b9c343c845b1d9d",
+                "reference": "6c4237cdc326b68608b59c041b9c343c845b1d9d",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Grohiro\\LaravelCamelCaseJson\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Convert response JSON key to camelCase",
+            "support": {
+                "issues": "https://github.com/grohiro/laravel-camelcase-json/issues",
+                "source": "https://github.com/grohiro/laravel-camelcase-json/tree/master"
+            },
+            "time": "2019-12-20T08:41:52+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

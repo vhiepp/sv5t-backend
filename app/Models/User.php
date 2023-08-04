@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -32,7 +33,8 @@ class User extends Authenticatable implements JWTSubject
         'provider_id',
         'role',
         'avatar',
-        'password'
+        'password',
+        'unit_id'
     ];
 
     /**
@@ -43,6 +45,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'unit_id',
+        'email_verified_at'
     ];
 
     /**
@@ -77,8 +81,29 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function posts(): HasMany
+    public function posted(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Forum::class);
     }
+
+    public function unit(): HasOne
+    {
+        return $this->hasOne(Unit::class, 'leader_user_id');
+    }
+
+    public function approval(): HasMany
+    {
+        return $this->hasMany(Approval::class);
+    }
+
+    public function approvalRequest(): HasMany
+    {
+        return $this->hasMany(ApprovalRequest::class);
+    }
+
+    public function approved(): HasMany
+    {
+        return $this->hasMany(ApprovalRequestStatus::class);
+    }
+
 }

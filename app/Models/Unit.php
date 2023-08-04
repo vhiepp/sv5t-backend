@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Unit extends Model
 {
@@ -15,4 +16,11 @@ class Unit extends Model
         'logo',
         'leader_user_id'
     ];
+
+    protected $hidden = ['leader_user_id'];
+
+    public function leader(): HasOne
+    {
+        return $this->hasOne(User::class, 'id');
+    }
 }

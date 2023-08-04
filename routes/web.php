@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Post;
+use App\Models\Forum;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Helpers\DateHelper;
+use App\Models\Approval;
+use App\Models\Unit;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,9 +19,7 @@ use App\Helpers\DateHelper;
 */
 
 Route::get('/', function () {
+  $result = Forum::find(1);
 
-
-  // dd(DateHelper::make('2023-06-21 03:14:22'));
-  dd(\Hash::make('123456'));
-
+  return response()->json($result->toArray());
 });
