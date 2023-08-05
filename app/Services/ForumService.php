@@ -106,7 +106,8 @@ class ForumService {
 
         $paginate = $data['paginate'] ? $data['paginate'] : 5;
         
-        return $results->select(
+        $results = $results->select(
+            'id',
             'title',
             'slug',
             'thumb as thumbnail',
@@ -118,7 +119,28 @@ class ForumService {
             'created_at as created_time',
             'updated_at as updated_time',
         )->paginate($paginate);
+        
+        $comments = []; $hearts = [];
+        foreach ($results as $index => $forum) {
+            $forum->user;
+            array_push($comments, $forum->comments->where('active', 1));
+            array_push($hearts, $forum->hearts->where('active', 1)->count());
+        }
+        $results = $results->toArray();
+        foreach ($results['data'] as $index => $forum) {
+            $comment = [
+                'count' => count($comments[$index]),
+                'data' => (auth()->check() && auth()->user()['role'] == 'admin') ? $comments[$index] : null
+            ];
+            $results['data'][$index]['comments'] = $comment;
+            
+            $results['data'][$index]['hearts'] = [
+                'count' => $hearts[$index],
+                'data' => null
+            ];
+        }
 
+        return $results;
     }
 
     public function getBySlug($slug) {
@@ -126,8 +148,9 @@ class ForumService {
         if ($slug) {
             $result = Forum::where('slug', $slug);
 
-            return $result
+            $result = $result
                     ->select(
+                        'id',
                         'title',
                         'slug',
                         'content',
@@ -140,6 +163,36 @@ class ForumService {
                         'updated_at as updated_time',
                     )
                     ->get()[0];
+            $result->user;
+            $comments = $result->comments->where('active', 1);
+            $hearts = $result->hearts->where('active', 1);
+            
+            $result = $result->toArray();
+
+            foreach ($comments as $index => $comment) {
+                $comment->user;
+            }
+            
+            $comments = $comments->toArray();
+            $result['comments'] = [
+                'count' => count($comments),
+                'data' => array_splice($comments, 0, 5)
+            ];
+            $isMyHeart = false;
+            if (auth()->check()) {
+                foreach ($hearts as $index => $heart) {
+                    if($heart['user_id'] == auth()->user()['id']) {
+                        $isMyHeart = true;
+                        break;
+                    }
+                }
+            }
+            $result['hearts'] = [
+                'is_heart' => $isMyHeart,
+                'count' => $hearts->count()
+            ];
+
+            return $result;
         }
         return [];
     }

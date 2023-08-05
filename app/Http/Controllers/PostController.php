@@ -29,10 +29,8 @@ class PostController extends Controller
                 'active' => $request->input('active')
             ]);
     
-            foreach ($results as $index => $result) {
-                $result->user;
-    
-                $result['creator'] = [
+            foreach ($results['data'] as $index => $result) {
+                $results['data'][$index]['creator'] = [
     
                     'user_id' => Base64::id_encode($result['user']['id']),
                     'fullname' => $result['user']['fullname'],
@@ -46,11 +44,11 @@ class PostController extends Controller
     
                 ];
     
-                unset($result['user']);
-                unset($result['user_id']);
-
-                $result['created_time'] = DateHelper::make($result['created_time']);
-                $result['updated_time'] = DateHelper::make($result['updated_time']);
+                unset($results['data'][$index]['user']);
+                unset($results['data'][$index]['user_id']);
+    
+                $results['data'][$index]['created_time'] = DateHelper::make($result['created_time']);
+                $results['data'][$index]['updated_time'] = DateHelper::make($result['updated_time']);
             }
             
             return response($results);
@@ -66,34 +64,32 @@ class PostController extends Controller
     }
 
     public function getBySlug(Request $request) {
-        try {
-            
-            $result = $this->forumService->getBySlug(
-                $request->input('slug')
-            );
-    
-            $result->user;
-            $result['creator'] = [
-    
-                'user_id' => Base64::id_encode($result['user']['id']),
-                'fullname' => $result['user']['fullname'],
-                'sur_name' => $result['user']['sur_name'],
-                'given_name' => $result['user']['given_name'],
-                'email' => $result['user']['email'],
-                'class' => $result['user']['class'],
-                'stu_code' => $result['user']['stu_code'],
-                'role' => $result['user']['role'],
-                'avatar' => $result['user']['avatar'],
-    
-            ];
-    
-            unset($result['user']);
-            unset($result['user_id']);
-    
-            $result['created_time'] = DateHelper::make($result['created_time']);
-            $result['updated_time'] = DateHelper::make($result['updated_time']);
-    
-            return response($result);
+        $result = $this->forumService->getBySlug(
+            $request->input('slug')
+        );
+
+        $result['creator'] = [
+
+            'user_id' => Base64::id_encode($result['user']['id']),
+            'fullname' => $result['user']['fullname'],
+            'sur_name' => $result['user']['sur_name'],
+            'given_name' => $result['user']['given_name'],
+            'email' => $result['user']['email'],
+            'class' => $result['user']['class'],
+            'stu_code' => $result['user']['stu_code'],
+            'role' => $result['user']['role'],
+            'avatar' => $result['user']['avatar'],
+
+        ];
+
+        unset($result['user']);
+        unset($result['user_id']);
+
+        $result['created_time'] = DateHelper::make($result['created_time']);
+        $result['updated_time'] = DateHelper::make($result['updated_time']);
+
+        return response($result);
+        try {      
 
         } catch (\Throwable $th) {
             return \response([
