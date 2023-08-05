@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\HeartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,13 @@ Route::middleware('api')->group(function () {
             Route::post('user', [AuthController::class, 'user']);
             Route::post('signout', [AuthController::class, 'signout']);
         });
+
+    });
+
+    Route::middleware('auth.signin')->group(function () {
+
+        Route::post('forum/heart', [HeartController::class, 'heart']);
+
 
     });
     

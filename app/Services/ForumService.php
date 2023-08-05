@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Forum;
 use App\Helpers\Base64;
+use App\Helpers\DateHelper;
 use Illuminate\Support\Str;
 
 class ForumService {
@@ -123,14 +124,28 @@ class ForumService {
         $comments = []; $hearts = [];
         foreach ($results as $index => $forum) {
             $forum->user;
-            array_push($comments, $forum->comments->where('active', 1));
+            $cms = $forum->comments->where('active', 1);
+            $count = $cms->count();
+            if (auth()->check() && auth()->user()['role'] == 'admin') {
+                foreach ($cms as $index => $cm) {
+                    $cm->user;
+                    $cms[$index]['create_time'] = DateHelper::make($cm['created_at']);
+                    if ($index > 4) break;
+                }
+                $cms = $cms->toArray();
+                $cms = array_splice($cms, 0, 5);
+            }
+            array_push($comments, [
+                'count' => $count,
+                'data' => $cms
+            ]);
             array_push($hearts, $forum->hearts->where('active', 1)->count());
         }
         $results = $results->toArray();
         foreach ($results['data'] as $index => $forum) {
             $comment = [
-                'count' => count($comments[$index]),
-                'data' => (auth()->check() && auth()->user()['role'] == 'admin') ? $comments[$index] : null
+                'count' => $comments[$index]['count'],
+                'data' => (auth()->check() && auth()->user()['role'] == 'admin') ? $comments[$index]['data'] : null
             ];
             $results['data'][$index]['comments'] = $comment;
             
