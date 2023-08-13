@@ -20,14 +20,14 @@ class ForumService {
                 $url = $request->file('thumbnail')->move($folder, $fileName);
                 $path = env('APP_URL') . '/' . $folder . '/' . $fileName;
             }
-            
+
             $content = Str::of($request->input('content'))->replace('"', "'");
 
             $forum = Forum::create([
                 'title' => $request->input('title'),
                 'content' => $content,
                 'thumb' => $path,
-                'active' => $request->input('postNow') ? 1 : 0,
+                'active' => auth()->user()['role'] == 'admin' && $request->input('postNow') ? 1 : 0,
                 'type' => $type,
                 'description' => $request->input('description'),
                 'user_id' => auth()->user()['id']
@@ -55,7 +55,7 @@ class ForumService {
 
         return Forum::where('slug', $request->input('slug'))
                     ->update($data);
-    } 
+    }
 
     public function get($data) {
 
@@ -70,7 +70,7 @@ class ForumService {
             case 'deleted':
                 $ac = -1;
                 break;
-            
+
             default:
                 $ac = 1;
                 break;
@@ -101,12 +101,12 @@ class ForumService {
                     $order = "desc";
                     break;
             }
-            
+
         }
         $results = $results->orderBy('created_at', $order);
 
         $paginate = $data['paginate'] ? $data['paginate'] : 5;
-        
+
         $results = $results->select(
             'id',
             'title',
@@ -120,7 +120,7 @@ class ForumService {
             'created_at as created_time',
             'updated_at as updated_time',
         )->paginate($paginate);
-        
+
         $comments = []; $hearts = [];
         foreach ($results as $index => $forum) {
             $forum->user;
@@ -148,7 +148,7 @@ class ForumService {
                 'data' => (auth()->check() && auth()->user()['role'] == 'admin') ? $comments[$index]['data'] : null
             ];
             $results['data'][$index]['comments'] = $comment;
-            
+
             $results['data'][$index]['hearts'] = [
                 'count' => $hearts[$index],
                 'data' => null
@@ -159,7 +159,7 @@ class ForumService {
     }
 
     public function getBySlug($slug) {
-        
+
         if ($slug) {
             $result = Forum::where('slug', $slug);
 
@@ -181,13 +181,13 @@ class ForumService {
             $result->user;
             $comments = $result->comments->where('active', 1);
             $hearts = $result->hearts->where('active', 1);
-            
+
             $result = $result->toArray();
 
             foreach ($comments as $index => $comment) {
                 $comment->user;
             }
-            
+
             $comments = $comments->toArray();
             $result['comments'] = [
                 'count' => count($comments),

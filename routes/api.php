@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\HeartController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,44 +25,45 @@ Route::middleware('api')->group(function () {
         Route::prefix('auth')->group(function () {
 
             Route::post('login', [\App\Http\Controllers\Admin\AuthController::class, 'login']);
-            
+
             Route::post('google/url', [\App\Http\Controllers\Admin\AuthController::class, 'getGoogleUrl']);
             Route::post('google/login', [\App\Http\Controllers\Admin\AuthController::class, 'googleLogin']);
-            
+
             Route::middleware('auth.admin.login')->group(function () {
-        
+
                 Route::post('logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout']);
                 Route::post('refresh', [\App\Http\Controllers\Admin\AuthController::class, 'refresh']);
                 Route::post('me', [\App\Http\Controllers\Admin\AuthController::class, 'me']);
-        
+
             });
 
         });
+
         Route::middleware('auth.admin.login')->group(function () {
             Route::prefix('forum')->group(function () {
-    
+
                 Route::prefix('posts')->group(function () {
-    
+
                     Route::post('create', [\App\Http\Controllers\Admin\PostController::class, 'store']);
                     Route::post('active', [\App\Http\Controllers\Admin\PostController::class, 'active']);
                     Route::post('update', [\App\Http\Controllers\Admin\PostController::class, 'update']);
                     Route::post('delete', [\App\Http\Controllers\Admin\PostController::class, 'destroy']);
-    
+
                     Route::post('pending-count', [\App\Http\Controllers\Admin\PostController::class, 'pendingCout']);
-    
+
                 });
-    
+
                 Route::prefix('notifications')->group(function () {
-    
+
                     Route::post('create', [\App\Http\Controllers\Admin\NotificationController::class, 'store']);
                     Route::post('active', [\App\Http\Controllers\Admin\NotificationController::class, 'active']);
                     Route::post('update', [\App\Http\Controllers\Admin\NotificationController::class, 'update']);
                     Route::post('delete', [\App\Http\Controllers\Admin\NotificationController::class, 'destroy']);
-    
+
                     Route::post('pending-count', [\App\Http\Controllers\Admin\NotificationController::class, 'pendingCout']);
-    
+
                 });
-    
+
             });
 
             Route::prefix('approval')->group(function () {
@@ -71,16 +72,14 @@ Route::middleware('api')->group(function () {
             });
         });
 
-        
-
     });
     // end admin api
-    
-    // get post list 
+
+    // get post list
     Route::post('posts', [PostController::class, 'getList']);
     Route::post('post', [PostController::class, 'getBySlug']);
 
-    // get notification list 
+    // get notification list
     Route::post('notifications', [NotificationController::class, 'getList']);
     Route::post('notification', [NotificationController::class, 'getBySlug']);
 
@@ -104,9 +103,13 @@ Route::middleware('api')->group(function () {
 
     Route::middleware('auth.signin')->group(function () {
 
-        Route::post('forum/heart', [HeartController::class, 'heart']);
+        Route::post('heart', [HeartController::class, 'heart']);
+        Route::post('comment', [CommentController::class, 'create']);
 
+        Route::post('posts/create', [PostController::class, 'store']);
 
     });
-    
+
+    Route::post('comments', [CommentController::class, 'get']);
+
 });

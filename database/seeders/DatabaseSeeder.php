@@ -5,6 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\RequirementCriteria;
+use App\Models\User;
+use App\Models\Forum;
+use App\Models\Comment;
+use App\Models\Heart;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,19 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $requirementCriteriaList = [
-            'Đạo đức tốt',
-            'Học tập tốt',
-            'Thể lực tốt',
-            'Tình nguyện tốt',
-            'Hội nhập tốt'
-
-        ];
-        foreach ($requirementCriteriaList as $key => $value) {
-            # code...
-            RequirementCriteria::create([
-                'name' => $value
-            ]);
-        }
+        $this->call([
+            RequirementCreteriaSeeder::class,
+            UserSeeder::class,
+            ForumSeeder::class
+        ]);
     }
 }
