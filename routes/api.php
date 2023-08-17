@@ -25,6 +25,7 @@ Route::middleware('api')->group(function () {
         Route::prefix('auth')->group(function () {
 
             Route::post('login', [\App\Http\Controllers\Admin\AuthController::class, 'login']);
+            Route::post('login/provider', [\App\Http\Controllers\Admin\AuthController::class, 'loginWithProvider']);
 
             Route::post('google/url', [\App\Http\Controllers\Admin\AuthController::class, 'getGoogleUrl']);
             Route::post('google/login', [\App\Http\Controllers\Admin\AuthController::class, 'googleLogin']);
@@ -70,6 +71,10 @@ Route::middleware('api')->group(function () {
                 Route::post('create', [\App\Http\Controllers\Admin\ApprovalController::class, 'store']);
                 Route::post('get', [\App\Http\Controllers\Admin\ApprovalController::class, 'index']);
             });
+
+            Route::prefix('user')->group(function () {
+                Route::post('/', [\App\Http\Controllers\Admin\UserController::class, 'get']);
+            });
         });
 
     });
@@ -88,14 +93,16 @@ Route::middleware('api')->group(function () {
 
     Route::prefix('authen')->group(function () {
         Route::post('signin', [AuthController::class, 'signin']);
+        Route::post('signin/firebase', [AuthController::class, 'signInWithFirebase']);
 
         Route::prefix('microsoft')->group(function () {
+
             Route::post('url', [AuthController::class, 'microsoftGetUrl']);
             Route::post('callback', [AuthController::class, 'microsoftSignin']);
         });
 
         Route::middleware('auth.signin')->group(function () {
-            Route::post('user', [AuthController::class, 'user']);
+            Route::post('profile', [AuthController::class, 'user']);
             Route::post('signout', [AuthController::class, 'signout']);
         });
 

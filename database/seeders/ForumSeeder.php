@@ -22,7 +22,7 @@ class ForumSeeder extends Seeder
             array_push($userId, $user['id']);
         }
 
-        for ($i=0; $i < 200; $i++) {
+        for ($i=0; $i < 100; $i++) {
             Forum::create([
                 'title' => fake()->unique()->sentence(12),
                 'content' => fake()->realTextBetween($minNbChars = 1000, $maxNbChars = 10000, $indexSize = 2),
@@ -50,7 +50,7 @@ class ForumSeeder extends Seeder
             ]);
         }
 
-        for ($i=0; $i < 2000; $i++) {
+        for ($i=0; $i < 500; $i++) {
             Heart::create([
                 'user_id' => fake()->randomElement($userId),
                 'forum_id' => fake()->randomElement($forumId),

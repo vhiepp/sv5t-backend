@@ -32,7 +32,58 @@ class AuthController extends Controller
         if (!$token || auth()->user()['role'] != 'admin') {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, auth()->user());
+    }
+
+    public function loginWithProvider(Request $request) {
+        try {
+
+            $provider = $request->input('providerData')[0]['providerId'];
+            $providerId = $request->input('providerData')[0]['uid'];
+
+            $user = User::where('provider', $provider)
+                            ->where('provider_id', $providerId)
+                            ->get();
+            if (count($user) == 0) {
+                $email = explode("@", $request->input('providerData')[0]['email']);
+                $mssv = '';
+                if ($email[1] == 'st.tvu.edu.vn') {
+                    $mssv = $email[0];
+                }
+                $avatar = $request->input('providerData')[0]['photoURL']
+                        ? $request->input('providerData')[0]['photoURL']
+                        : env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg';
+                $name = explode(" ", $request->input('providerData')[0]['displayName'], 2);
+                User::create([
+                    'fullname' => $request->input('providerData')[0]['displayName'],
+                    'sur_name' => !empty($name[0]) ? $name[0] : '',
+                    'given_name' => !empty($name[1]) ? $name[1] : '',
+                    'phone' => $request->input('providerData')[0]['phoneNumber'],
+                    'email' => $request->input('providerData')[0]['email'],
+                    'stu_code' => $mssv,
+                    'provider' => $provider,
+                    'provider_id' => $providerId,
+                    'avatar' => $avatar,
+                    'role' => 'user',
+                    'password' => rand(),
+                ]);
+
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+            $user = $user[0];
+
+            if ($user['role'] == 'admin') {
+                $token = auth()->tokenById($user['id']);
+                if (!$token) {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+
+                return $this->respondWithToken($token, $user);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
     public function getGoogleUrl()
@@ -47,14 +98,14 @@ class AuthController extends Controller
         try {
             //code...
             $userProvider = Socialite::driver('google')->stateless()->user()->user;
-    
+
             $provider = 'google';
             $user = User::where('provider', $provider)->where('provider_id', $userProvider['id'])->where('role', 'admin')->first();
-    
+
             if (! $token = auth()->tokenById($user['id'])) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
-            
+
             return $this->respondWithToken($token);
         } catch (\Throwable $th) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -80,7 +131,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        
+
         $cookie = cookie()->forget('token');
 
         return response()->json(['message' => 'Successfully logged out'], 200)->cookie($cookie);
@@ -103,14 +154,17 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user = null)
     {
+        if ($user == null) {
+            $user == auth()->user();
+        }
         $cookie = cookie('token', $token, 60);
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'user' => $user
         ])->cookie($cookie);
     }
 }

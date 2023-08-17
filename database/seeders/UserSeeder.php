@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
             'given_name' => 'Văn Hiệp',
             'email' => 'vanhiep@admin.com',
             'role' => 'admin',
-            'avatar' => 'https://sv.tvusmc.com/assets/images/avatars/avatar_13.jpg',
+            'stu_code' => '110121209',
+            'avatar' => env('APP_URL', 'http://localhost:8000') . '/assets/images/avatars/avatar_13.jpg',
             'password' => 'Hiep33@@'
         ]);
-
-        User::factory(200)->create();
+        User::factory(50)->create();
     }
 }

@@ -17,12 +17,23 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $class = [
+            'da21tta',
+            'da21ttb',
+            'da21ttc',
+            'da21da',
+            'da21db',
+            'da21dc',
+            'da20tta',
+            'da20ttb',
+        ];
         return [
             'fullname' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '123456', // password
             'role' => 'user',
+            'class' => fake()->randomElement($class),
             'avatar' => env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg',
             'remember_token' => Str::random(10),
         ];
