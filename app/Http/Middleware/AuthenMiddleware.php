@@ -18,6 +18,9 @@ class AuthenMiddleware
         if (auth()->check()) {
             return $next($request);
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json([
+            'not_signin' => true,
+            'message' => 'Unauthorized'
+        ], 200);
     }
 }

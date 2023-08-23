@@ -139,7 +139,7 @@ class ForumService {
                 'count' => $count,
                 'data' => $cms
             ]);
-            array_push($hearts, $forum->hearts->where('active', 1)->count());
+            array_push($hearts, $forum->hearts->where('active', 1));
         }
         $results = $results->toArray();
         foreach ($results['data'] as $index => $forum) {
@@ -149,9 +149,17 @@ class ForumService {
             ];
             $results['data'][$index]['comments'] = $comment;
 
+            $isMyHeart = false;
+            if (auth()->check()) {
+                $thisHearts = $hearts[$index]->where('user_id', auth()->user()['id']);
+                if ($thisHearts->count() > 0) {
+                    $isMyHeart = true;
+                }
+            }
             $results['data'][$index]['hearts'] = [
-                'count' => $hearts[$index],
-                'data' => null
+                'count' => $hearts[$index]->count(),
+                'data' => null,
+                'is_heart' => $isMyHeart
             ];
         }
 

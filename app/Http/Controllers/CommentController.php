@@ -26,7 +26,7 @@ class CommentController extends Controller
                     default:
                         $order = "asc";
                         break;
-                } 
+                }
             }
             $forum = Forum::where('slug', $request->input('slug'))->select('id')->first();
             $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
@@ -35,6 +35,9 @@ class CommentController extends Controller
                                     ->where('forum_id', $forum['id'])
                                     ->orderBy('created_at', $order)
                                     ->paginate($paginate);
+                foreach ($comments as $index => $comment) {
+                    $comments[$index]['user'] = $comment->user;
+                }
             }
         }
         return response()->json($comments);
@@ -43,12 +46,14 @@ class CommentController extends Controller
     public function create(Request $request) {
         try {
             $forum = Forum::where('slug', $request->input('slug'))->select('id')->first();
-            Comment::create([
+            $comment = Comment::create([
                 'content' => $request->input('content'),
                 'forum_id' => $forum['id'],
                 'user_id' => auth()->user()['id']
             ]);
+            $comment['user'] = $comment->user;
             return response([
+                'comment' => $comment,
                 'status' => 'success',
                 'error' => false
             ]);

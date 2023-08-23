@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\HeartController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommentController;
 
@@ -111,7 +112,7 @@ Route::middleware('api')->group(function () {
     Route::middleware('auth.signin')->group(function () {
 
         Route::post('heart', [HeartController::class, 'heart']);
-        Route::post('comment', [CommentController::class, 'create']);
+        Route::post('comments/create', [CommentController::class, 'create']);
 
         Route::post('posts/create', [PostController::class, 'store']);
 
