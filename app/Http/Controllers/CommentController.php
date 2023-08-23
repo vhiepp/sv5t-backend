@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Forum;
 use App\Models\Comment;
+use App\Helpers\DateHelper;
 
 class CommentController extends Controller
 {
@@ -37,6 +38,10 @@ class CommentController extends Controller
                                     ->paginate($paginate);
                 foreach ($comments as $index => $comment) {
                     $comments[$index]['user'] = $comment->user;
+                    $comments[$index]['created_time'] = DateHelper::make($comments[$index]['created_at']);
+                    $comments[$index]['updated_time'] = DateHelper::make($comments[$index]['updated_at']);
+                    unset($comments[$index]['created_at']);
+                    unset($comments[$index]['updated_at']);
                 }
             }
         }
