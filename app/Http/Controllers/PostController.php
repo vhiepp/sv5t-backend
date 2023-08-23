@@ -64,32 +64,32 @@ class PostController extends Controller
     }
 
     public function getBySlug(Request $request) {
-        $result = $this->forumService->getBySlug(
-            $request->input('slug')
-        );
-
-        $result['creator'] = [
-
-            'user_id' => Base64::id_encode($result['user']['id']),
-            'fullname' => $result['user']['fullname'],
-            'sur_name' => $result['user']['sur_name'],
-            'given_name' => $result['user']['given_name'],
-            'email' => $result['user']['email'],
-            'class' => $result['user']['class'],
-            'stu_code' => $result['user']['stu_code'],
-            'role' => $result['user']['role'],
-            'avatar' => $result['user']['avatar'],
-
-        ];
-
-        unset($result['user']);
-        unset($result['user_id']);
-
-        $result['created_time'] = DateHelper::make($result['created_time']);
-        $result['updated_time'] = DateHelper::make($result['updated_time']);
-
-        return response($result);
         try {
+            $result = $this->forumService->getBySlug(
+                $request->input('slug')
+            );
+
+            $result['creator'] = [
+
+                'user_id' => Base64::id_encode($result['user']['id']),
+                'fullname' => $result['user']['fullname'],
+                'sur_name' => $result['user']['sur_name'],
+                'given_name' => $result['user']['given_name'],
+                'email' => $result['user']['email'],
+                'class' => $result['user']['class'],
+                'stu_code' => $result['user']['stu_code'],
+                'role' => $result['user']['role'],
+                'avatar' => $result['user']['avatar'],
+
+            ];
+
+            unset($result['user']);
+            unset($result['user_id']);
+
+            $result['created_time'] = DateHelper::make($result['created_time']);
+            $result['updated_time'] = DateHelper::make($result['updated_time']);
+
+            return response($result);
 
         } catch (\Throwable $th) {
             return \response([
@@ -122,9 +122,15 @@ class PostController extends Controller
     public function store(Request $request)
     {
         try {
-            //code...
             $post = $this->forumService->create($request, 'post');
+
+            $post['created_time'] = DateHelper::make($post['created_at']);
+            $post['updated_time'] = DateHelper::make($post['updated_at']);
+            unset($post['created_at']);
+            unset($post['updated_at']);
+
             return response([
+                'post' => $post,
                 'status' => 'success'
             ]);
         } catch (\Throwable $th) {

@@ -12,28 +12,31 @@ class ForumService {
     public function create($request, $type = 'post')
     {
 
-            if ($request->input('thumbnail')) {
-                $path = env('APP_URL') . '/' . $request->input('thumbnail');
-            } else {
-                $folder = "uploads/" . date('Y/m/d');
-                $fileName = date('H-i') . '-' . $request->file('thumbnail')->getClientOriginalName();
-                $url = $request->file('thumbnail')->move($folder, $fileName);
-                $path = env('APP_URL') . '/' . $folder . '/' . $fileName;
-            }
+        if ($request->input('thumbnail')) {
+            $path = env('APP_URL') . '/' . $request->input('thumbnail');
+        } else {
+            $folder = "uploads/" . date('Y/m/d');
+            $fileName = date('H-i') . '-' . $request->file('thumbnail')->getClientOriginalName();
+            $url = $request->file('thumbnail')->move($folder, $fileName);
+            $path = env('APP_URL') . '/' . $folder . '/' . $fileName;
+        }
 
-            $content = Str::of($request->input('content'))->replace('"', "'");
+        $content = Str::of($request->input('content'))->replace('"', "'");
 
-            $forum = Forum::create([
-                'title' => $request->input('title'),
-                'content' => $content,
-                'thumb' => $path,
-                'active' => auth()->user()['role'] == 'admin' && $request->input('postNow') ? 1 : 0,
-                'type' => $type,
-                'description' => $request->input('description'),
-                'user_id' => auth()->user()['id']
-            ]);
-
-            return $forum;
+        $forum = Forum::create([
+            'title' => $request->input('title'),
+            'content' => $content,
+            'thumb' => $path,
+            'active' => auth()->user()['role'] == 'admin' && $request->input('postNow') ? 1 : 0,
+            'type' => $type,
+            'description' => $request->input('description'),
+            'user_id' => auth()->user()['id']
+        ]);
+        $forum->origins()->create([
+            'link' => $request->input('origin')
+        ]);
+        $forum->origins;
+        return $forum;
     }
 
     public function update($request) {
@@ -123,6 +126,10 @@ class ForumService {
 
         $comments = []; $hearts = [];
         foreach ($results as $index => $forum) {
+            if (!auth()->check() || auth()->user()['role'] != 'admin') {
+                unset($results[$index]['content']);
+            }
+
             $forum->user;
             $cms = $forum->comments->where('active', 1);
             $count = $cms->count();
@@ -187,6 +194,7 @@ class ForumService {
                     )
                     ->get()[0];
             $result->user;
+            $result->origins;
             $comments = $result->comments->where('active', 1);
             $hearts = $result->hearts->where('active', 1);
 

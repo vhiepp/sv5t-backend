@@ -39,6 +39,11 @@ class Forum extends Model
         return $this->hasMany(Heart::class);
     }
 
+    public function origins(): HasMany
+    {
+        return $this->hasMany(Origin::class);
+    }
+
     public function sluggable(): array
     {
         return [
