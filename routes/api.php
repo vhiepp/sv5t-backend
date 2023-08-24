@@ -115,6 +115,7 @@ Route::middleware('api')->group(function () {
         Route::post('comments/create', [CommentController::class, 'create']);
 
         Route::post('posts/create', [PostController::class, 'store']);
+        Route::post('posts/forme', [PostController::class, 'getListForMe']);
 
     });
 

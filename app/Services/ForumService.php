@@ -75,21 +75,27 @@ class ForumService {
             case 'deleted':
                 $ac = -1;
                 break;
-
+            case 'all':
+                $ac = -2;
+                break;
             default:
                 $ac = 1;
                 break;
         }
 
-        $results = Forum::where('active', $ac);
+        if ($data['active'] != 'all') {
+            $results = Forum::where('active', $ac);
+        } else {
+            $results = Forum::where('active', '<>', $ac);
+        }
 
         if ($data['type']) {
             $results = $results->where('type', $data['type']);
         }
 
         if ($data['user_id']) {
-            $id = Base64::id_decode($data['user_id']);
-            $results = $results->where('user_id', $id);
+            // $id = Base64::id_decode($data['user_id']);
+            $results = $results->where('user_id', $data['user_id']);
         }
 
         $order = "desc";

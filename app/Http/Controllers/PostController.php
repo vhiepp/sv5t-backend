@@ -32,7 +32,7 @@ class PostController extends Controller
             foreach ($results['data'] as $index => $result) {
                 $results['data'][$index]['creator'] = [
 
-                    'user_id' => Base64::id_encode($result['user']['id']),
+                    'user_id' => $result['user']['id'],
                     'fullname' => $result['user']['fullname'],
                     'sur_name' => $result['user']['sur_name'],
                     'given_name' => $result['user']['given_name'],
@@ -53,6 +53,72 @@ class PostController extends Controller
 
             return response($results);
 
+        } catch (\Throwable $th) {
+            return \response([
+                'error' => true,
+                'msg' => 'Params error',
+                'msg_vi' => 'Có thể lỗi do sai dữ liệu tham số truyền vào'
+            ], 500);
+        }
+
+    }
+
+    public function getListForMe(Request $request) {
+
+        try {
+
+            $paginate = $request->input('paginate') ? $request->input('paginate') : 5;
+
+            $results = $this->forumService->get([
+                'paginate' => $paginate,
+                'user_id' => auth()->user()['id'],
+                'type' => 'post',
+                'order' => $request->input('order'),
+                'active' => $request->input('active') ? $request->input('active') : 'all'
+            ]);
+
+            foreach ($results['data'] as $index => $result) {
+                $results['data'][$index]['creator'] = [
+
+                    'user_id' => $result['user']['id'],
+                    'fullname' => $result['user']['fullname'],
+                    'sur_name' => $result['user']['sur_name'],
+                    'given_name' => $result['user']['given_name'],
+                    'email' => $result['user']['email'],
+                    'class' => $result['user']['class'],
+                    'stu_code' => $result['user']['stu_code'],
+                    'role' => $result['user']['role'],
+                    'avatar' => $result['user']['avatar'],
+
+                ];
+
+                unset($results['data'][$index]['user']);
+                unset($results['data'][$index]['user_id']);
+
+                $results['data'][$index]['created_time'] = DateHelper::make($result['created_time']);
+                $results['data'][$index]['updated_time'] = DateHelper::make($result['updated_time']);
+
+                $ac = 'active';
+                switch ($results['data'][$index]['active']) {
+                    case 1:
+                        $ac = 'active';
+                        break;
+                    case 0:
+                        $ac = 'wait';
+                        break;
+                    case -1:
+                        $ac = 'deleted';
+                        break;
+
+                    default:
+                        $ac = 'active';
+                        break;
+                }
+
+                $results['data'][$index]['active'] = $ac;
+            }
+
+            return response($results);
         } catch (\Throwable $th) {
             return \response([
                 'error' => true,
