@@ -15,7 +15,7 @@ class CommentController extends Controller
             'total' => 0
         ];
         if ($request->input('slug')) {
-            $order = "asc";
+            $order = "desc";
             if ($request->input('order')) {
                 switch ($request->input('order')) {
                     case 'new':
@@ -25,7 +25,7 @@ class CommentController extends Controller
                         $order = "asc";
                         break;
                     default:
-                        $order = "asc";
+                        $order = "desc";
                         break;
                 }
             }
@@ -57,6 +57,11 @@ class CommentController extends Controller
                 'user_id' => auth()->user()['id']
             ]);
             $comment['user'] = $comment->user;
+
+            $comment['created_time'] = DateHelper::make($comment['created_at']);
+            $comment['updated_time'] = DateHelper::make($comment['updated_at']);
+            unset($comment['created_at']);
+            unset($comment['updated_at']);
             return response([
                 'comment' => $comment,
                 'status' => 'success',

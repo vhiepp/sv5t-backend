@@ -32,9 +32,11 @@ class ForumService {
             'description' => $request->input('description'),
             'user_id' => auth()->user()['id']
         ]);
-        $forum->origins()->create([
-            'link' => $request->input('origin')
-        ]);
+        if ($request->input('origin')) {
+            $forum->origins()->create([
+                'link' => $request->input('origin')
+            ]);
+        }
         $forum->origins;
         return $forum;
     }

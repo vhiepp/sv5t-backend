@@ -16,7 +16,8 @@ class AuthenMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->check()) {
-            return $next($request);
+            $response = $next($request);
+            return $response;
         }
         return response()->json([
             'not_signin' => true,
