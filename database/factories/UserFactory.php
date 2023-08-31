@@ -42,6 +42,7 @@ class UserFactory extends Factory
             'password' => '123456',
             'class_id' => fake()->randomElement($classArray),
             'unit_id' => fake()->randomElement($unitArray),
+            'slogan' => fake()->realTextBetween($minNbChars = 10, $maxNbChars = 50, $indexSize = 2),
             'avatar' => env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg',
             'remember_token' => Str::random(10),
         ];

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->nullable();
+            $table->string('slogan')->default('Tự hào, phấn đấu là Sinh Viên 5 Tốt');
             $table->string('class_id')->nullable();
             $table->string('stu_code')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->default('other');
