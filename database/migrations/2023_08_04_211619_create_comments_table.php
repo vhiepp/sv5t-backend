@@ -12,13 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained(
-                table: 'users', indexName: 'user_id_comment_forum'
-            );
-            $table->foreignId('forum_id')->constrained(
-                table: 'forums', indexName: 'comment_belongto_forum'
-            );
+            $table->uuid('id')->primary();
+            $table->string('user_id');
+            $table->string('forum_id');
             $table->longText('content');
             $table->integer('active')->default(1);
             $table->timestamps();

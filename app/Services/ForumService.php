@@ -26,7 +26,7 @@ class ForumService {
         $forum = Forum::create([
             'title' => $request->input('title'),
             'content' => $content,
-            'thumb' => $path,
+            'thumbnail' => $path,
             'active' => auth()->user()['role'] == 'admin' && $request->input('postNow') ? 1 : 0,
             'type' => $type,
             'description' => $request->input('description'),
@@ -51,9 +51,9 @@ class ForumService {
             $data['content'] = $content;
         }
         if ($request->input('thumbnail')) {
-            $data['thumb'] = $request->input('thumbnail');
+            $data['thumbnail'] = $request->input('thumbnail');
         }
-        $data['active'] = $request->input('postNow') ? 1 : 0;
+        $data['active'] = auth()->user()['role'] == 'admin' && $request->input('postNow') ? 1 : 0;
         if ($request->input('description')) {
             $data['description'] = $request->input('description');
         }
@@ -94,7 +94,6 @@ class ForumService {
         }
 
         if ($data['user_id']) {
-            // $id = Base64::id_decode($data['user_id']);
             $results = $results->where('user_id', $data['user_id']);
         }
 
@@ -118,19 +117,7 @@ class ForumService {
 
         $paginate = $data['paginate'] ? $data['paginate'] : 5;
 
-        $results = $results->select(
-            'id',
-            'title',
-            'slug',
-            'thumb as thumbnail',
-            'active',
-            'type',
-            'user_id',
-            'description',
-            'content',
-            'created_at as created_time',
-            'updated_at as updated_time',
-        )->paginate($paginate);
+        $results = $results->paginate($paginate);
 
         $comments = []; $hearts = [];
         foreach ($results as $index => $forum) {
@@ -138,7 +125,7 @@ class ForumService {
                 unset($results[$index]['content']);
             }
 
-            $forum->user;
+            $forum->creator;
             $cms = $forum->comments->where('active', 1);
             $count = $cms->count();
             if (auth()->check() && auth()->user()['role'] == 'admin') {
@@ -186,23 +173,7 @@ class ForumService {
         if ($slug) {
             $result = Forum::where('slug', $slug);
 
-            $result = $result
-                    ->select(
-                        'id',
-                        'title',
-                        'slug',
-                        'content',
-                        'thumb',
-                        'active',
-                        'type',
-                        'user_id',
-                        'description',
-                        'created_at as created_time',
-                        'updated_at as updated_time',
-                    )
-                    ->get()[0];
-            $result->user;
-            $result->origins;
+            $result = $result->get()[0];
             $comments = $result->comments->where('active', 1);
             $hearts = $result->hearts->where('active', 1);
 

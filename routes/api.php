@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\HeartController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,6 +82,9 @@ Route::middleware('api')->group(function () {
     });
     // end admin api
 
+
+    Route::post('user', [UserController::class, 'getProfile']);
+
     // get post list
     Route::post('posts', [PostController::class, 'getList']);
     Route::post('post', [PostController::class, 'getBySlug']);
@@ -112,9 +116,12 @@ Route::middleware('api')->group(function () {
     Route::middleware('auth.signin')->group(function () {
 
         Route::post('heart', [HeartController::class, 'heart']);
+
         Route::post('comments/create', [CommentController::class, 'create']);
+        Route::post('comments/delete', [CommentController::class, 'destroy']);
 
         Route::post('posts/create', [PostController::class, 'store']);
+        Route::post('posts/delete', [PostController::class, 'destroy']);
         Route::post('posts/forme', [PostController::class, 'getListForMe']);
 
     });

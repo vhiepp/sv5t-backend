@@ -4,26 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Helpers\DateHelper;
 
-class Origin extends Model
+class ClassInfo extends Model
 {
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'link', 'forum_id'
+        'code',
+        'name'
     ];
 
     protected $hidden = [
+        'id',
         'created_at',
         'updated_at'
     ];
 
-    public function forum(): HasOne
+    protected static function boot ()
     {
-        return $this->hasOne(Forum::class, 'id', 'forum_id');
-    }
+        parent::boot();
 
+        static::creating(function ($model) {
+            $schoolYear = Str::substr($model['code'], 2, 2);
+            $model->setAttribute('school_year', (int)$schoolYear);
+        });
+    }
 }

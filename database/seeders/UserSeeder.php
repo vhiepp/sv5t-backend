@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'given_name' => 'Văn Hiệp',
             'email' => 'vanhiep@admin.com',
             'role' => 'admin',
-            'stu_code' => '110121209',
+            'stu_code' => '',
             'avatar' => env('APP_URL', 'http://localhost:8000') . '/assets/images/avatars/avatar_13.jpg',
             'password' => 'Hiep33@@'
         ]);

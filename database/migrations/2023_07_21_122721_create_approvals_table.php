@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('approvals', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->dateTime('date_start');
             $table->dateTime('date_end');
             $table->integer('status')->default(1);
-            $table->foreignId('user_id')->constrained(
-                table: 'users', indexName: 'user_id_create_approval'
-            );
+            $table->string('user_id');
             $table->timestamps();
         });
     }

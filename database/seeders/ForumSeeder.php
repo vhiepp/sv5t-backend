@@ -26,7 +26,7 @@ class ForumSeeder extends Seeder
             Forum::create([
                 'title' => fake()->unique()->sentence(12),
                 'content' => fake()->realTextBetween($minNbChars = 1000, $maxNbChars = 10000, $indexSize = 2),
-                'thumb' => fake()->imageUrl(360, 200, 'animals', true, 'cats'),
+                'thumbnail' => fake()->imageUrl(360, 200, 'animals', true, 'cats'),
                 'active' => fake()->randomElement([1, 1, 1, 1, 1, 1, 0, -1]),
                 'type' => fake()->randomElement(['post', 'notification']),
                 'description' => fake()->realTextBetween($minNbChars = 100, $maxNbChars = 300, $indexSize = 2),

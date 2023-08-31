@@ -12,19 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('forums', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('content');
-            $table->string('thumb');
+            $table->string('thumbnail')->nullable();
             $table->integer('active')->default(0);
             $table->string('type');
             $table->longText('description')->nullable();
-
-            $table->foreignId('user_id')->constrained(
-                table: 'users', indexName: 'forums_user_id'
-            );
-
+            $table->string('user_id');
             $table->timestamps();
         });
     }

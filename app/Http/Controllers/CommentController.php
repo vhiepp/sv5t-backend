@@ -38,10 +38,6 @@ class CommentController extends Controller
                                     ->paginate($paginate);
                 foreach ($comments as $index => $comment) {
                     $comments[$index]['user'] = $comment->user;
-                    $comments[$index]['created_time'] = DateHelper::make($comments[$index]['created_at']);
-                    $comments[$index]['updated_time'] = DateHelper::make($comments[$index]['updated_at']);
-                    unset($comments[$index]['created_at']);
-                    unset($comments[$index]['updated_at']);
                 }
             }
         }
@@ -56,12 +52,6 @@ class CommentController extends Controller
                 'forum_id' => $forum['id'],
                 'user_id' => auth()->user()['id']
             ]);
-            $comment['user'] = $comment->user;
-
-            $comment['created_time'] = DateHelper::make($comment['created_at']);
-            $comment['updated_time'] = DateHelper::make($comment['updated_at']);
-            unset($comment['created_at']);
-            unset($comment['updated_at']);
             return response([
                 'comment' => $comment,
                 'status' => 'success',
@@ -74,5 +64,26 @@ class CommentController extends Controller
                 'status' => 'error',
             ]);
         }
+    }
+
+    public function destroy(Request $request)
+    {
+        try {
+            //code...
+            $status = Comment::where('id', $request->input('id'))->where('user_id', auth()->user()['id'])->deleteActive();
+            if ($status) {
+                return response([
+                    'status' => 'success',
+                    'error' => false,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return response([
+            'status' => 'error',
+            'error' => true,
+        ]);
     }
 }

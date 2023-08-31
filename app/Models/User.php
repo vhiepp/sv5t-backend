@@ -7,13 +7,17 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
+use App\Helpers\DateHelper;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUuids, Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,8 +28,8 @@ class User extends Authenticatable implements JWTSubject
         'fullname',
         'sur_name',
         'given_name',
+        'slug',
         'phone',
-        'class',
         'email',
         'stu_code',
         'date_of_birth',
@@ -34,7 +38,9 @@ class User extends Authenticatable implements JWTSubject
         'role',
         'avatar',
         'password',
-        // 'unit_id'
+        'unit_id',
+        'class_id',
+        'ttsv_id',
     ];
 
     /**
@@ -47,7 +53,11 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
         'unit_id',
         'email_verified_at',
-        'provider_id'
+        'created_at',
+        'updated_at',
+        'provider_id',
+        'ttsv_id',
+        'class_id'
     ];
 
     /**
@@ -82,29 +92,65 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // event get data
+        static::retrieved(function ($model) {
+            $model->classInfo;
+            $model->unit;
+            // $model->created_time = DateHelper::make($model->created_at);
+            // $model->updated_time = DateHelper::make($model->updated_at);
+        });
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'fullname',
+                'separator' => '',
+                'onUpdate' => true
+            ]
+        ];
+    }
+
+
+
+    public function scopeGetWhereSlug(Builder $query, string $slug)
+    {
+        return $query->firstWhere('slug', $slug);
+    }
+
     public function posted(): HasMany
     {
-        return $this->hasMany(Forum::class);
+        return $this->hasMany(Forum::class, 'user_id', 'id');
+    }
+
+    public function classInfo(): HasOne
+    {
+        return $this->hasOne(ClassInfo::class, 'id', 'class_id');
     }
 
     public function unit(): HasOne
     {
-        return $this->hasOne(Unit::class, 'leader_user_id');
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
 
     public function approval(): HasMany
     {
-        return $this->hasMany(Approval::class);
+        return $this->hasMany(Approval::class, 'user_id', 'id');
     }
 
     public function approvalRequest(): HasMany
     {
-        return $this->hasMany(ApprovalRequest::class);
+        return $this->hasMany(ApprovalRequest::class, 'user_id', 'id');
     }
 
     public function approved(): HasMany
     {
-        return $this->hasMany(ApprovalRequestStatus::class);
+        return $this->hasMany(ApprovalRequestStatus::class, 'user_id', 'id');
     }
 
 }

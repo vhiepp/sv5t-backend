@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Weidner\Goutte\GoutteServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         // Grohiro\LaravelCamelCaseJson\CamelCaseJsonResponseServiceProvider::class,
 

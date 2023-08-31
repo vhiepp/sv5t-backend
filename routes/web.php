@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use App\Helpers\DateHelper;
 use App\Models\Approval;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Http;
+use App\Models\ClassInfo;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +22,38 @@ use App\Models\Unit;
 */
 
 Route::get('/', function () {
-  $result = Forum::find(2);
 
-  return response()->json($result->toArray());
+    // $crawler = Goutte::request('GET', 'https://daotao.tvu.edu.vn/cvht?slNamhoc=2022-2023');
+    // $classList = $crawler->filter('select[name=slMalop]')->each(function ($node) {
+    //     return $node->children()->each(function ($class) {
+    //         return $class->text();
+    //     });
+    // })[0];
+    // unset($classList[0]);
+
+    // return response($classList);
+
+    // $response = Http::withHeaders([
+    //     'Content-Type' => 'application/json',
+    // ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdslopcotkb', [
+    //     'filter' => [
+    //         'hoc_ky' => 20232
+    //     ],
+    // ]);
+
+    // $response = Http::withHeaders([
+    //     'Content-Type' => 'application/x-www-form-urlencoded',
+    // ])->asForm()->post('https://ttsv.tvu.edu.vn/api/auth/login', [
+    //     'username' => '110121209',
+    //     'password' => 'Hiep33@@',
+    //     'grant_type' => 'password'
+    // ]);
+
+    // dd($response->json());
+
+
+    // $user = User::where('slug', 'duongvanhiep')->first();
+    // $user->classInfo;
+
+    return response(['msg' => 'Not suported']);
 });

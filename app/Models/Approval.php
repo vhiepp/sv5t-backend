@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Helpers\DateHelper;
 
 class Approval extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'date_start',
@@ -24,11 +26,11 @@ class Approval extends Model
 
     public function creator(): HasOne
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function requests(): HasMany
     {
-        return $this->hasMany(ApprovalRequest::class);
+        return $this->hasMany(ApprovalRequest::class, 'approval_id', 'id');
     }
 }

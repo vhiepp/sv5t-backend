@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Helpers\DateHelper;
 
 class ApprovalRequest extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'user_id',
@@ -21,21 +23,21 @@ class ApprovalRequest extends Model
 
     public function requestSender(): HasOne
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
     public function approval(): HasOne
     {
-        return $this->hasOne(Approval::class);
+        return $this->hasOne(Approval::class, 'id', 'approval_id');
     }
 
     public function status(): HasOne
     {
-        return $this->hasOne(ApprovalRequestStatus::class);
+        return $this->hasOne(ApprovalRequestStatus::class, 'approval_request_id', 'id');
     }
 
     public function files(): HasMany
     {
-        return $this->hasMany(ApprovalRequestFileCriteria::class);
+        return $this->hasMany(ApprovalRequestFileCriteria::class, 'approval_request_id', 'id');
     }
 }

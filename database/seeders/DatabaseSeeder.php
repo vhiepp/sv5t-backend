@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            UnitSeeder::class,
+            ClassInfoSeeder::class,
             RequirementCreteriaSeeder::class,
             UserSeeder::class,
             ForumSeeder::class

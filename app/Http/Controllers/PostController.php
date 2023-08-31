@@ -29,28 +29,6 @@ class PostController extends Controller
                 'active' => $request->input('active')
             ]);
 
-            foreach ($results['data'] as $index => $result) {
-                $results['data'][$index]['creator'] = [
-
-                    'user_id' => $result['user']['id'],
-                    'fullname' => $result['user']['fullname'],
-                    'sur_name' => $result['user']['sur_name'],
-                    'given_name' => $result['user']['given_name'],
-                    'email' => $result['user']['email'],
-                    'class' => $result['user']['class'],
-                    'stu_code' => $result['user']['stu_code'],
-                    'role' => $result['user']['role'],
-                    'avatar' => $result['user']['avatar'],
-
-                ];
-
-                unset($results['data'][$index]['user']);
-                unset($results['data'][$index]['user_id']);
-
-                $results['data'][$index]['created_time'] = DateHelper::make($result['created_time']);
-                $results['data'][$index]['updated_time'] = DateHelper::make($result['updated_time']);
-            }
-
             return response($results);
 
         } catch (\Throwable $th) {
@@ -78,26 +56,6 @@ class PostController extends Controller
             ]);
 
             foreach ($results['data'] as $index => $result) {
-                $results['data'][$index]['creator'] = [
-
-                    'user_id' => $result['user']['id'],
-                    'fullname' => $result['user']['fullname'],
-                    'sur_name' => $result['user']['sur_name'],
-                    'given_name' => $result['user']['given_name'],
-                    'email' => $result['user']['email'],
-                    'class' => $result['user']['class'],
-                    'stu_code' => $result['user']['stu_code'],
-                    'role' => $result['user']['role'],
-                    'avatar' => $result['user']['avatar'],
-
-                ];
-
-                unset($results['data'][$index]['user']);
-                unset($results['data'][$index]['user_id']);
-
-                $results['data'][$index]['created_time'] = DateHelper::make($result['created_time']);
-                $results['data'][$index]['updated_time'] = DateHelper::make($result['updated_time']);
-
                 $ac = 'active';
                 switch ($results['data'][$index]['active']) {
                     case 1:
@@ -134,29 +92,7 @@ class PostController extends Controller
             $result = $this->forumService->getBySlug(
                 $request->input('slug')
             );
-
-            $result['creator'] = [
-
-                'user_id' => Base64::id_encode($result['user']['id']),
-                'fullname' => $result['user']['fullname'],
-                'sur_name' => $result['user']['sur_name'],
-                'given_name' => $result['user']['given_name'],
-                'email' => $result['user']['email'],
-                'class' => $result['user']['class'],
-                'stu_code' => $result['user']['stu_code'],
-                'role' => $result['user']['role'],
-                'avatar' => $result['user']['avatar'],
-
-            ];
-
-            unset($result['user']);
-            unset($result['user_id']);
-
-            $result['created_time'] = DateHelper::make($result['created_time']);
-            $result['updated_time'] = DateHelper::make($result['updated_time']);
-
             return response($result);
-
         } catch (\Throwable $th) {
             return \response([
                 'error' => true,
@@ -189,11 +125,6 @@ class PostController extends Controller
     {
         try {
             $post = $this->forumService->create($request, 'post');
-
-            $post['created_time'] = DateHelper::make($post['created_at']);
-            $post['updated_time'] = DateHelper::make($post['updated_at']);
-            unset($post['created_at']);
-            unset($post['updated_at']);
 
             return response([
                 'post' => $post,
@@ -235,5 +166,21 @@ class PostController extends Controller
      */
     public function destroy(Request $request)
     {
+        try {
+            //code...
+            $status = Forum::where('type', 'post')->where('slug', $request->input('slug'))->where('user_id', auth()->user()['id'])->deleteActive();
+            if ($status) {
+                return response([
+                    'status' => 'success',
+                    'error' => false,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return response([
+            'status' => 'error',
+            'error' => true,
+        ]);
     }
 }

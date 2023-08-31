@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('units', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slogan')->nullable();
             $table->string('logo')->nullable();
-            $table->foreignId('leader_user_id')->constrained(
-                table: 'users', indexName: 'unit_leader_user_id'
-            );
+            $table->string('leader_user_id')->nullable();
             $table->timestamps();
         });
     }

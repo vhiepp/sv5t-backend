@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Helpers\DateHelper;
 
 class ApprovalRequestFileCriteria extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'file_url',
@@ -22,12 +24,12 @@ class ApprovalRequestFileCriteria extends Model
 
     public function approvalRequest(): HasOne
     {
-        return $this->hasOne(ApprovalRequest::class);
+        return $this->hasOne(ApprovalRequest::class, 'id', 'approval_request_id');
     }
 
     public function requirementCriteria(): HasOne
     {
-        return $this->hasOne(RequirementCriteria::class);
+        return $this->hasOne(RequirementCriteria::class, 'id', 'requirement_criteria_id');
     }
 
 }

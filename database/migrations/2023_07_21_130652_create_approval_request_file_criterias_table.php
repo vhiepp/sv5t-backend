@@ -12,14 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('approval_request_file_criterias', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('file_url');
-            $table->foreignId('approval_request_id')->constrained(
-                table: 'approval_requests', indexName: 'approval_request_id'
-            );
-            $table->foreignId('requirement_criteria_id')->constrained(
-                table: 'requirement_criterias', indexName: 'requirement_criteria_id'
-            );
+
+            $table->string('approval_request_id');
+            // $table->foreignId('approval_request_id')->constrained(
+                //     table: 'approval_requests', indexName: 'approval_request_id'
+                // );
+            $table->string('requirement_criteria_id');
+            // $table->foreignId('requirement_criteria_id')->constrained(
+            //     table: 'requirement_criterias', indexName: 'requirement_criteria_id'
+            // );
             $table->integer('active')->default(1);
             $table->timestamps();
         });

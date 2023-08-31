@@ -36,7 +36,7 @@ class AuthController extends Controller
             ]);
         }
 
-
+        $user = auth()->user();
         $cookie = cookie('token', $token, 60);
         return response()->json([
             'is_valid' => true,
@@ -44,7 +44,7 @@ class AuthController extends Controller
                 'email' => 1,
                 'password' => 1
             ],
-            'user' => auth()->user()
+            'user' => $user
         ])->cookie($cookie);
     }
 
@@ -130,8 +130,9 @@ class AuthController extends Controller
     }
 
     public function user() {
+        $user = auth()->user();
         return response([
-            'user' => auth()->user()
+            'user' => $user
         ]);
     }
 
@@ -163,7 +164,7 @@ class AuthController extends Controller
                     'provider' => $provider,
                     'provider_id' => $providerId,
                     'avatar' => $avatar,
-                    'role' => 'user',
+                    'role' => 'student',
                     'password' => rand(),
                 ]);
             }
