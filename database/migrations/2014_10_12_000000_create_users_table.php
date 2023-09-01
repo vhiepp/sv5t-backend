@@ -29,8 +29,10 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->string('ttsv_id')->nullable();
+            $table->integer('school_year')->nullable();
             $table->enum('role', ['admin', 'student', 'leader'])->default('student');
             $table->longText('avatar');
+            $table->boolean('tick')->default(false);
             $table->rememberToken();
             $table->string('unit_id')->nullable();
             $table->timestamps();

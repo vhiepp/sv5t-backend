@@ -8,6 +8,8 @@ use App\Http\Controllers\HeartController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClassInfoController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +110,7 @@ Route::middleware('api')->group(function () {
 
         Route::middleware('auth.signin')->group(function () {
             Route::post('profile', [AuthController::class, 'user']);
+            Route::post('profile/update', [AuthController::class, 'updateProfile']);
             Route::post('signout', [AuthController::class, 'signout']);
         });
 
@@ -127,5 +130,7 @@ Route::middleware('api')->group(function () {
     });
 
     Route::post('comments', [CommentController::class, 'get']);
+    Route::post('class_infos', [ClassInfoController::class, 'get']);
+    Route::post('unit_infos', [UnitController::class, 'get']);
 
 });

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Http;
 
 class UnitSeeder extends Seeder
 {
@@ -13,29 +14,22 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
-            [
-                'name' => 'Câu lạc bộ Tin học'
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdskhoasinhviencotkb', [
+            'filter' => [
+                'hoc_ky' => 20232
             ],
-            [
-                'name' => 'Câu lạc bộ Sinh Viên 5 tốt'
-            ],
-            [
-                'name' => 'Câu lạc bộ Thanh niên tình nguyện'
-            ],
-            [
-                'name' => 'Câu lạc bộ Hành trình Sinh Viên'
-            ],
-            [
-                'name' => 'Câu lạc bộ Người tốt việc tốt'
-            ],
-            [
-                'name' => 'Câu lạc bộ Khởi Nghiệp'
-            ],
-        ];
+        ])->json();
 
-        foreach ($data as $value) {
-            Unit::create($value);
+        if ($response['result'] && $response['code'] == 200) {
+            foreach ($response['data']['ds_du_lieu'] as $data) {
+                if ($data['ten_du_lieu'] != 'Không đơn vị') {
+                    Unit::create([
+                        'name' => $data['ten_du_lieu']
+                    ]);
+                }
+            }
         }
     }
 }

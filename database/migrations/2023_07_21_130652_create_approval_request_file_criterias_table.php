@@ -14,15 +14,9 @@ return new class extends Migration
         Schema::create('approval_request_file_criterias', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('file_url');
-
             $table->string('approval_request_id');
-            // $table->foreignId('approval_request_id')->constrained(
-                //     table: 'approval_requests', indexName: 'approval_request_id'
-                // );
             $table->string('requirement_criteria_id');
-            // $table->foreignId('requirement_criteria_id')->constrained(
-            //     table: 'requirement_criterias', indexName: 'requirement_criteria_id'
-            // );
+            $table->longText('comment')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();
         });

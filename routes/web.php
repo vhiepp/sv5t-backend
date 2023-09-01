@@ -22,38 +22,21 @@ use App\Models\ClassInfo;
 */
 
 Route::get('/', function () {
-
-    // $crawler = Goutte::request('GET', 'https://daotao.tvu.edu.vn/cvht?slNamhoc=2022-2023');
-    // $classList = $crawler->filter('select[name=slMalop]')->each(function ($node) {
-    //     return $node->children()->each(function ($class) {
-    //         return $class->text();
-    //     });
-    // })[0];
-    // unset($classList[0]);
-
-    // return response($classList);
-
     // $response = Http::withHeaders([
     //     'Content-Type' => 'application/json',
-    // ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdslopcotkb', [
+    // ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdskhoasinhviencotkb', [
     //     'filter' => [
     //         'hoc_ky' => 20232
     //     ],
-    // ]);
+    // ])->json();
 
-    // $response = Http::withHeaders([
-    //     'Content-Type' => 'application/x-www-form-urlencoded',
-    // ])->asForm()->post('https://ttsv.tvu.edu.vn/api/auth/login', [
-    //     'username' => '110121209',
-    //     'password' => 'Hiep33@@',
-    //     'grant_type' => 'password'
-    // ]);
+    // if ($response['result'] && $response['code'] == 200) {
 
-    // dd($response->json());
-
-
-    // $user = User::where('slug', 'duongvanhiep')->first();
-    // $user->classInfo;
-
-    return response(['msg' => 'Not suported']);
+    //     foreach ($response['data']['ds_du_lieu'] as $data) {
+    //         Unit::create([
+    //             'name' => $data['ten_du_lieu']
+    //         ]);
+    //     }
+    // }
+    return response(Unit::all());
 });

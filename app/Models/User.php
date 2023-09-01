@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use App\Helpers\DateHelper;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -42,6 +43,7 @@ class User extends Authenticatable implements JWTSubject
         'unit_id',
         'class_id',
         'ttsv_id',
+        'school_year'
     ];
 
     /**
@@ -97,12 +99,19 @@ class User extends Authenticatable implements JWTSubject
     {
         parent::boot();
 
+        static::creating(function ($model) {
+            try {
+                $schoolYear = Str::substr($model['stu_code'], 4, 2);
+                if (is_numeric($schoolYear)) {
+                    $model->setAttribute('school_year', (int)$schoolYear);
+                }
+            } catch (\Throwable $th) {}
+        });
+
         // event get data
         static::retrieved(function ($model) {
             $model->classInfo;
             $model->unit;
-            // $model->created_time = DateHelper::make($model->created_at);
-            // $model->updated_time = DateHelper::make($model->updated_at);
         });
     }
 

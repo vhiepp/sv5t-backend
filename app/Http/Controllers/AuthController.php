@@ -136,6 +136,49 @@ class AuthController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request) {
+        try {
+            $data = [];
+            if ($request->input('fullname')) {
+                $data['fullname'] = $request->input('fullname');
+            }
+            if ($request->input('slogan')) {
+                $data['slogan'] = $request->input('slogan');
+            }
+            if ($request->input('unit_id')) {
+                $data['unit_id'] = $request->input('unit_id');
+            }
+            if ($request->input('gender')) {
+                $data['gender'] = $request->input('gender');
+            }
+            if ($request->input('class_id')) {
+                $data['class_id'] = $request->input('class_id');
+            }
+            if ($request->file('avatar')) {
+                $folder = "uploads/avatar";
+                $fileName = date('H-i') . '-' . auth()->user()['id'] . '-' . $request->file('avatar')->getClientOriginalName();
+                $url = $request->file('avatar')->move($folder, $fileName);
+                $path = env('APP_URL') . '/' . $folder . '/' . $fileName;
+                $data['avatar'] = $path;
+            }
+            $user = User::where('id', auth()->user()['id'])->update($data);
+            auth()->user()->refresh();
+            if ($user) {
+                return response([
+                    'user' => auth()->user(),
+                    'status' => 'success',
+                    'error' => false
+                ]);
+            }
+        } catch (\Throwable $th) {}
+        return response([
+            'user' => null,
+            'status' => 'error',
+            'error' => true
+        ]);
+
+    }
+
     public function signInWithFirebase(Request $request) {
         try {
             $provider = $request->input('providerData')[0]['providerId'];

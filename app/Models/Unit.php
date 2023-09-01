@@ -25,7 +25,6 @@ class Unit extends Model
         'updated_at',
         'slogan',
         'logo',
-        'id'
     ];
 
     public function leader(): HasOne

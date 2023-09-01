@@ -175,9 +175,7 @@ class PostController extends Controller
                     'error' => false,
                 ]);
             }
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+        } catch (\Throwable $th) {}
         return response([
             'status' => 'error',
             'error' => true,
