@@ -64,7 +64,6 @@ class AuthController extends Controller
                     'provider' => $provider,
                     'provider_id' => $providerId,
                     'avatar' => $avatar,
-                    'role' => 'user',
                     'password' => rand(),
                 ]);
 

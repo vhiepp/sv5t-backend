@@ -21,9 +21,9 @@ class RequirementCreteriaSeeder extends Seeder
             'Hội nhập tốt'
 
         ];
-        foreach ($requirementCriteriaList as $key => $value) {
-            # code...
+        foreach ($requirementCriteriaList as $index => $value) {
             RequirementCriteria::create([
+                'id' => 'require_' . ($index + 1),
                 'name' => $value
             ]);
         }

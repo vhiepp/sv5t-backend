@@ -14,14 +14,14 @@ class ApprovalRequestStatus extends Model
 
     protected $fillable = [
         'approval_request_id',
-        'user_id',
+        'approved_by_user_id',
         'status',
         'date_approved'
     ];
 
     protected $hidden = [
         'approval_request_id',
-        'user_id'
+        'approved_by_user_id'
     ];
 
     public function approvalRequest(): HasOne
@@ -31,6 +31,6 @@ class ApprovalRequestStatus extends Model
 
     public function approvedBy(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class, 'id', 'approved_by_user_id');
     }
 }

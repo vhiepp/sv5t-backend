@@ -20,7 +20,24 @@ class ApprovalRequestFileCriteria extends Model
     ];
 
     protected $hidden = [
+        'requirement_criteria_id',
+        'active',
+        'id',
+        'approval_request_id',
+        'created_at',
+        'updated_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // event get data
+        static::retrieved(function ($model) {
+            $model->created_time = DateHelper::make($model->created_at);
+            $model->updated_time = DateHelper::make($model->updated_at);
+        });
+    }
 
     public function approvalRequest(): HasOne
     {

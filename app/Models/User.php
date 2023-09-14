@@ -60,7 +60,9 @@ class User extends Authenticatable implements JWTSubject
         'updated_at',
         'provider_id',
         'ttsv_id',
-        'class_id'
+        'class_id',
+        'sur_name',
+        'given_name'
     ];
 
     /**
@@ -111,7 +113,7 @@ class User extends Authenticatable implements JWTSubject
         // event get data
         static::retrieved(function ($model) {
             $model->classInfo;
-            $model->unit;
+            $model->unitInfo;
         });
     }
 
@@ -143,7 +145,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(ClassInfo::class, 'id', 'class_id');
     }
 
-    public function unit(): HasOne
+    public function unitInfo(): HasOne
     {
         return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
@@ -163,4 +165,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(ApprovalRequestStatus::class, 'user_id', 'id');
     }
 
+    public function scopeIsSendRequest(Builder $query, Approval $approval)
+    {
+
+    }
 }

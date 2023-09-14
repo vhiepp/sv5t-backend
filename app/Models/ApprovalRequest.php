@@ -36,7 +36,7 @@ class ApprovalRequest extends Model
         return $this->hasOne(ApprovalRequestStatus::class, 'approval_request_id', 'id');
     }
 
-    public function files(): HasMany
+    public function requireDetail(): HasMany
     {
         return $this->hasMany(ApprovalRequestFileCriteria::class, 'approval_request_id', 'id');
     }

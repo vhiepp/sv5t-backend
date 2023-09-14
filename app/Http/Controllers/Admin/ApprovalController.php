@@ -15,10 +15,10 @@ class ApprovalController extends Controller
     {
         try {
             $results = Approval::latest()->get();
-            foreach ($results as $index => $result) {
-                $results[$index]['date_start'] = date('d/m/Y', strtotime($result['date_start']));
-                $results[$index]['date_end'] = date('d/m/Y', strtotime($result['date_end']));
-            }
+            // foreach ($results as $index => $result) {
+            //     $results[$index]['date_start'] = date('d/m/Y', strtotime($result['date_start']));
+            //     $results[$index]['date_end'] = date('d/m/Y', strtotime($result['date_end']));
+            // }
             return response([
                 'status' => 'success',
                 'data' => $results

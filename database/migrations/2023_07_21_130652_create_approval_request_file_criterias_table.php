@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('approval_request_file_criterias', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('file_name');
             $table->string('file_url');
             $table->string('approval_request_id');
             $table->string('requirement_criteria_id');

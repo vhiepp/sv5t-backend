@@ -10,6 +10,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClassInfoController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\ApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +85,6 @@ Route::middleware('api')->group(function () {
     });
     // end admin api
 
-
     Route::post('user', [UserController::class, 'getProfile']);
 
     // get post list
@@ -132,5 +132,11 @@ Route::middleware('api')->group(function () {
     Route::post('comments', [CommentController::class, 'get']);
     Route::post('class_infos', [ClassInfoController::class, 'get']);
     Route::post('unit_infos', [UnitController::class, 'get']);
+
+    Route::post('approval_detail', [ApprovalController::class, 'getDetail']);
+
+    Route::post('/test', function (Request $request) {
+        dd($request->file());
+    });
 
 });

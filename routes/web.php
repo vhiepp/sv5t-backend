@@ -9,6 +9,7 @@ use App\Models\Approval;
 use App\Models\Unit;
 use Illuminate\Support\Facades\Http;
 use App\Models\ClassInfo;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,22 +22,6 @@ use App\Models\ClassInfo;
 |
 */
 
-Route::get('/', function () {
-    // $response = Http::withHeaders([
-    //     'Content-Type' => 'application/json',
-    // ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdskhoasinhviencotkb', [
-    //     'filter' => [
-    //         'hoc_ky' => 20232
-    //     ],
-    // ])->json();
+Route::post('/', function (Request $request) {
 
-    // if ($response['result'] && $response['code'] == 200) {
-
-    //     foreach ($response['data']['ds_du_lieu'] as $data) {
-    //         Unit::create([
-    //             'name' => $data['ten_du_lieu']
-    //         ]);
-    //     }
-    // }
-    return response(Unit::all());
 });

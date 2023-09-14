@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('requirement_criterias', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->string('id')->primary();
             $table->string('name');
             $table->integer('active')->default(1);
             $table->integer('required')->default(1);

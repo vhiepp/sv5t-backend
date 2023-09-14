@@ -31,6 +31,12 @@ class Comment extends Model
     {
         parent::boot();
 
+        static::created(function ($model) {
+            $model->user;
+            $model->created_time = DateHelper::make($model->created_at);
+            $model->updated_time = DateHelper::make($model->updated_at);
+        });
+
         // event get data
         static::retrieved(function ($model) {
             $model->user;
