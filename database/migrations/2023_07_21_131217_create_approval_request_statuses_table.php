@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('approval_request_id');
             $table->string('approved_by_user_id');
-            $table->integer('status')->default(0);
+            $table->enum('status', ['await_approved', 'not_approved', 'approved']);
             $table->dateTime('date_approved');
             $table->timestamps();
         });

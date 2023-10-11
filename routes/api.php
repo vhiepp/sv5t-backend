@@ -120,12 +120,23 @@ Route::middleware('api')->group(function () {
 
         Route::post('heart', [HeartController::class, 'heart']);
 
-        Route::post('comments/create', [CommentController::class, 'create']);
-        Route::post('comments/delete', [CommentController::class, 'destroy']);
+        Route::prefix('comments')->group(function () {
 
-        Route::post('posts/create', [PostController::class, 'store']);
-        Route::post('posts/delete', [PostController::class, 'destroy']);
-        Route::post('posts/forme', [PostController::class, 'getListForMe']);
+            Route::post('create', [CommentController::class, 'create']);
+            Route::post('delete', [CommentController::class, 'destroy']);
+
+        });
+
+
+        Route::prefix('posts')->group(function () {
+
+            Route::post('create', [PostController::class, 'store']);
+            Route::post('delete', [PostController::class, 'destroy']);
+            Route::post('forme', [PostController::class, 'getListForMe']);
+
+        });
+
+        Route::post('send_approval_request', [ApprovalController::class, 'sendRequirementCriteria']);
 
     });
 
@@ -136,7 +147,7 @@ Route::middleware('api')->group(function () {
     Route::post('approval_detail', [ApprovalController::class, 'getDetail']);
 
     Route::post('/test', function (Request $request) {
-        dd($request->file());
+        
     });
 
 });

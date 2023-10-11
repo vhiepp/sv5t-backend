@@ -52,4 +52,23 @@ class Approval extends Model
     {
         return $this->hasMany(ApprovalRequest::class, 'approval_id', 'id');
     }
+
+    public static function lastest() {
+        return self::where('date_end', self::max('date_end'))->first();
+    }
+
+    public static function happenning() {
+        $nowDate = date('Y-m-d H:i:s');
+        return self::where('date_start', '<=', $nowDate)->where('date_end', '>=', $nowDate)->get();
+    }
+
+    public static function upcoming() {
+        $nowDate = date('Y-m-d H:i:s');
+        return self::where('date_start', '>', $nowDate)->get();
+    }
+
+    public static function finished() {
+        $nowDate = date('Y-m-d H:i:s');
+        return self::where('date_end', '<', $nowDate)->get();
+    }
 }

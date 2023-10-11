@@ -13,6 +13,7 @@ class ApprovalRequestFileCriteria extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'file_name',
         'file_url',
         'approval_request_id',
         'requirement_criteria_id',

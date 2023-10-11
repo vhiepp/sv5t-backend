@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('class_infos', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('code')->nullable();
+            $table->string('code')->unique();
             $table->integer('school_year')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();

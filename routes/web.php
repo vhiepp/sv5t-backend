@@ -22,6 +22,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/', function (Request $request) {
-
+Route::get('/', function (Request $request) {
+    dd(Approval::finished());
 });

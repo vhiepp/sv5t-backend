@@ -17,12 +17,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UnitSeeder::class,
-            ClassInfoSeeder::class,
-            RequirementCreteriaSeeder::class,
-            UserSeeder::class,
-            ForumSeeder::class
-        ]);
+        if (env('APP_ENV') == 'local') {
+            $this->call([
+                // UnitSeeder::class,
+                ClassInfoSeeder::class,
+                RequirementCreteriaSeeder::class,
+                UserSeeder::class,
+                ForumSeeder::class
+            ]);
+        } else {
+            $this->call([
+                // UnitSeeder::class,
+                ClassInfoSeeder::class,
+                RequirementCreteriaSeeder::class
+            ]);
+        }
     }
 }

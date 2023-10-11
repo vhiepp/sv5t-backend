@@ -37,7 +37,7 @@ class AuthController extends Controller
         }
 
         $user = auth()->user();
-        $cookie = cookie('token', $token, 60);
+        $cookie = cookie('token', $token, auth()->factory()->getTTL());
         return response()->json([
             'is_valid' => true,
             'status_signin' => [
@@ -117,7 +117,7 @@ class AuthController extends Controller
                 ]);
             }
             $token = auth()->tokenById($user['id']);
-            $cookie = cookie('token', $token, 60);
+            $cookie = cookie('token', $token, auth()->factory()->getTTL());
             return response()->json([
                 'token' => $token,
                 'is_valid' => true,
@@ -216,7 +216,7 @@ class AuthController extends Controller
             if (!$token) {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
-            $cookie = cookie('token', $token, 6000);
+            $cookie = cookie('token', $token, auth()->factory()->getTTL());
             return response()->json([
                 'is_valid' => true,
                 'user' => $user

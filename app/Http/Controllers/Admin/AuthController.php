@@ -158,7 +158,7 @@ class AuthController extends Controller
         if ($user == null) {
             $user == auth()->user();
         }
-        $cookie = cookie('token', $token, 60);
+        $cookie = cookie('token', $token, auth()->factory()->getTTL());
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

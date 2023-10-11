@@ -21,6 +21,19 @@ class ApprovalRequest extends Model
 
     protected $hidden = ['approval_id', 'user_id'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // event get data
+        static::creating(function ($model) {
+            $model->setAttribute('user_id', auth()->user()['id']);
+
+            $approvalHappenning = Approval::happenning()->first();
+            $model->setAttribute('approval_id', $approvalHappenning['id']);
+        });
+    }
+
     public function requestSender(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');

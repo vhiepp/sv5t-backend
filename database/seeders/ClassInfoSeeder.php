@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\ClassInfo;
 use Illuminate\Support\Facades\Http;
+use File;
+use Illuminate\Support\Str;
 
 class ClassInfoSeeder extends Seeder
 {
@@ -14,22 +16,23 @@ class ClassInfoSeeder extends Seeder
      */
     public function run(): void
     {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://ttsv.tvu.edu.vn/api/sch/w-locdslopcotkb', [
-            'filter' => [
-                'hoc_ky' => 20232
-            ],
-        ])->json();
+        $filePath = public_path('/data/class_info.json');
+        $content = File::get($filePath);
+        echo "Get class info data...\n";
 
-        if ($response['result'] && $response['code'] == 200) {
+        if (Str::isJson($content)) {
+            $results = json_decode($content);
 
-            foreach ($response['data']['ds_du_lieu'] as $data) {
-                ClassInfo::create([
-                    'code' => $data['ma_du_lieu'],
-                    'name' => $data['ten_du_lieu'],
+            foreach ($results as $classInfo) {
+
+                ClassInfo::firstOrCreate([
+                    'code' => $classInfo->ma_du_lieu,
+                    'name' => $classInfo->ten_du_lieu,
                 ]);
-            }
+
+            }   
         }
+
+        echo "Update class info data success...";
     }
 }
