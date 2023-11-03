@@ -20,28 +20,30 @@ class UserFactory extends Factory
     public function definition(): array
     {
 
-        $classList = ClassInfo::orderBy('school_year', 'desc')->limit(200)->get();
-        $classArray = [];
-        if ($classList) {
-            foreach ($classList as $class) {
-                array_push($classArray, $class['id']);
-            }
-        }
-        $unitList = Unit::all();
-        $unitArray = [];
-        if ($unitList) {
-            foreach ($unitList as $unit) {
-                array_push($unitArray, $unit['id']);
-            }
-        }
-
+        // $classList = ClassInfo::orderBy('school_year', 'desc')->limit(200)->get();
+        // $classArray = [];
+        // if ($classList) {
+        //     foreach ($classList as $class) {
+        //         array_push($classArray, $class['id']);
+        //     }
+        // }
+        // $unitList = Unit::all();
+        // $unitArray = [];
+        // if ($unitList) {
+        //     foreach ($unitList as $unit) {
+        //         array_push($unitArray, $unit['id']);
+        //     }
+        // }
+        $unit = Unit::inRandomOrder()->first();
+        $classInfo = ClassInfo::inRandomOrder()->first();
         return [
             'fullname' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '123456',
-            'class_id' => fake()->randomElement($classArray),
-            'unit_id' => fake()->randomElement($unitArray),
+            'stu_code' => rand(1000, 9999) . $classInfo->school_year . rand(100, 999),
+            'class_id' => $classInfo->id,
+            'unit_id' => isset($unit->id) ? $unit->id : null,
             'slogan' => fake()->realTextBetween($minNbChars = 10, $maxNbChars = 50, $indexSize = 2),
             'avatar' => env('APP_URL') . '/assets/images/avatars/avatar_' . rand(1, 24) . '.jpg',
             'remember_token' => Str::random(10),

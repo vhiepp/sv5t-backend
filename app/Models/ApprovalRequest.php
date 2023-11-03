@@ -16,21 +16,42 @@ class ApprovalRequest extends Model
     protected $fillable = [
         'user_id',
         'approval_id',
+        'approved_by_user_id',
+        'status',
         'active'
     ];
 
-    protected $hidden = ['approval_id', 'user_id'];
+    protected $hidden = [
+        'approval_id',
+        'user_id',
+        'active',
+        'approved_by_user_id',
+        'created_at',
+        'updated_at',
+
+    ];
 
     protected static function boot()
     {
         parent::boot();
 
-        // event get data
+        // event create data
         static::creating(function ($model) {
-            $model->setAttribute('user_id', auth()->user()['id']);
+
+            if (auth()->check()) {
+                $model->setAttribute('user_id', auth()->user()['id']);
+            }
 
             $approvalHappenning = Approval::happenning()->first();
             $model->setAttribute('approval_id', $approvalHappenning['id']);
+        });
+
+        static::retrieved(function ($model) {
+            $model->requestSender;
+            $model->approvedByUser;
+
+            $model->created_time = DateHelper::make($model->created_at);
+            $model->updated_time = DateHelper::make($model->updated_at);
         });
     }
 
@@ -44,13 +65,15 @@ class ApprovalRequest extends Model
         return $this->hasOne(Approval::class, 'id', 'approval_id');
     }
 
-    public function status(): HasOne
+    public function approvedByUser(): HasOne
     {
-        return $this->hasOne(ApprovalRequestStatus::class, 'approval_request_id', 'id');
+        return $this->hasOne(Approval::class, 'id', 'approved_by_user_id');
     }
 
     public function requireDetail(): HasMany
     {
         return $this->hasMany(ApprovalRequestFileCriteria::class, 'approval_request_id', 'id');
     }
+
+
 }

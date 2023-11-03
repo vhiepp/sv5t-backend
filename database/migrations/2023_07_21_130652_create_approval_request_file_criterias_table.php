@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('requirement_criteria_id');
             $table->longText('comment')->nullable();
             $table->integer('active')->default(1);
+            $table->boolean('qualified')->default(false);
             $table->timestamps();
         });
     }

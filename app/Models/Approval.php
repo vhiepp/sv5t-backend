@@ -33,10 +33,13 @@ class Approval extends Model
             $nowDate = date('Y-m-d H:i:s');
             if ($nowDate > $model->date_end) {
                 $model->status = 'finished';
+                $model->status_description = 'Đã đóng';
             } elseif ($nowDate < $model->date_start) {
                 $model->status = 'upcoming';
+                $model->status_description = 'Sắp tới';
             } elseif ($nowDate >= $model->date_start && $nowDate <= $model->date_end) {
                 $model->status = 'happenning';
+                $model->status_description = 'Đang mở';
             }
             $model->date_start = date('d/m/Y', strtotime($model['date_start']));
             $model->date_end = date('d/m/Y', strtotime($model['date_end']));

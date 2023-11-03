@@ -10,6 +10,10 @@ use App\Models\Unit;
 use Illuminate\Support\Facades\Http;
 use App\Models\ClassInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailNotify;
+use App\Jobs\SendEmail;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +27,15 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function (Request $request) {
-    dd(Approval::finished());
+
+    $users = User::all();
+    dd($users);
+    // SendEmail::dispatch($users);
+    // return   "Gui mail thanh cong";
+    // try {
+    //     //code...
+    // } catch (\Throwable $th) {
+    //     return "Gui mail that bai";
+    // }
+
 });

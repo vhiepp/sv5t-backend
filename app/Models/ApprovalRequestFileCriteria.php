@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use App\Helpers\DateHelper;
+use Illuminate\Support\Str;
 
 class ApprovalRequestFileCriteria extends Model
 {
@@ -17,13 +18,13 @@ class ApprovalRequestFileCriteria extends Model
         'file_url',
         'approval_request_id',
         'requirement_criteria_id',
-        'active'
+        'active',
+        'qualified'
     ];
 
     protected $hidden = [
         'requirement_criteria_id',
         'active',
-        'id',
         'approval_request_id',
         'created_at',
         'updated_at',
@@ -35,6 +36,9 @@ class ApprovalRequestFileCriteria extends Model
 
         // event get data
         static::retrieved(function ($model) {
+            if (!Str::isUrl($model->file_url)) {
+                $model->file_url = env('APP_URL', 'http://localhost:8000') . $model->file_url;
+            }
             $model->created_time = DateHelper::make($model->created_at);
             $model->updated_time = DateHelper::make($model->updated_at);
         });

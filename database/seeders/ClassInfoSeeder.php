@@ -33,6 +33,6 @@ class ClassInfoSeeder extends Seeder
             }   
         }
 
-        echo "Update class info data success...";
+        echo "Update class info data success...\n";
     }
 }

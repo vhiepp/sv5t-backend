@@ -15,12 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('user_id');
             $table->string('approval_id');
-            // $table->foreignId('user_id')->constrained(
-            //     table: 'users', indexName: 'user_id_request_approval'
-            // );
-            // $table->foreignId('approval_id')->constrained(
-            //     table: 'approvals', indexName: 'approval_id_request'
-            // );
+            $table->string('approved_by_user_id')->nullable();
+            $table->enum('status', ['await_approved', 'not_approved', 'approved'])->default('await_approved');
+            $table->dateTime('date_approved')->nullable();
             $table->integer('active')->default(1);
             $table->timestamps();
         });

@@ -19,15 +19,16 @@ class DatabaseSeeder extends Seeder
     {
         if (env('APP_ENV') == 'local') {
             $this->call([
-                // UnitSeeder::class,
+                UnitSeeder::class,
                 ClassInfoSeeder::class,
                 RequirementCreteriaSeeder::class,
                 UserSeeder::class,
-                ForumSeeder::class
+                ForumSeeder::class,
+                ApprovalSeeder::class
             ]);
         } else {
             $this->call([
-                // UnitSeeder::class,
+                UnitSeeder::class,
                 ClassInfoSeeder::class,
                 RequirementCreteriaSeeder::class
             ]);

@@ -33,4 +33,5 @@ class UserController extends Controller
             'user' => null
         ]);
     }
+
 }

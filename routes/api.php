@@ -73,8 +73,14 @@ Route::middleware('api')->group(function () {
             });
 
             Route::prefix('approval')->group(function () {
+
                 Route::post('create', [\App\Http\Controllers\Admin\ApprovalController::class, 'store']);
                 Route::post('get', [\App\Http\Controllers\Admin\ApprovalController::class, 'index']);
+
+                Route::post('request', [\App\Http\Controllers\Admin\ApprovalController::class, 'getApprovalRequest']);
+
+                Route::post('files/qualified', [\App\Http\Controllers\Admin\ApprovalController::class, 'qualifiedApprovalRequestFile']);
+                Route::post('comment', [\App\Http\Controllers\Admin\ApprovalController::class, 'commentRequestFile']);
             });
 
             Route::prefix('user')->group(function () {
@@ -106,6 +112,7 @@ Route::middleware('api')->group(function () {
 
             Route::post('url', [AuthController::class, 'microsoftGetUrl']);
             Route::post('callback', [AuthController::class, 'microsoftSignin']);
+
         });
 
         Route::middleware('auth.signin')->group(function () {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Approval;
+use App\Models\ApprovalRequest;
+use App\Models\ApprovalRequestFileCriteria;
 
 class ApprovalController extends Controller
 {
@@ -94,5 +96,86 @@ class ApprovalController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getApprovalRequest(Request $request) {
+        $approvalId = $request->input('approval_id') ? $request->input('approval_id') : Approval::lastest()->id;
+
+        $order = 'await_approved';
+        switch ($request->input('order')) {
+            case 'approved':
+                $order = 'approved';
+                break;
+            case 'not_approved':
+                $order = 'not_approved';
+                break;
+            default:
+                $order = 'await_approved';
+                break;
+        }
+        $approvalRequest = ApprovalRequest::where('approval_id', $approvalId)->orderBy('created_at', 'desc')->where('status', $order);
+        $paginate = $request->input('paginate') ? $request->input('paginate') : 8;
+        $approvalRequest = $approvalRequest->paginate($paginate);
+        foreach ($approvalRequest as $index => $aq) {
+            $aq['require_detail_is_send'] = $aq->requireDetail->groupBy('requirement_criteria_id');
+        }
+        return response()->json($approvalRequest);
+    }
+
+    public static function commentRequestFile(Request $request) {
+        $approvalRequestFileId = $request->input('file_id');
+
+        ApprovalRequestFileCriteria::where('id', $approvalRequestFileId)->update([
+            'comment' => $request->input('comment')
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'error' => false
+        ]);
+    }
+
+    public function qualifiedApprovalRequestFile(Request $request) {
+        
+        try {
+            $qualified = ApprovalRequestFileCriteria::where('id', $request->input('file_id'))->first()->toArray()['qualified'];
+        
+            ApprovalRequestFileCriteria::where('id', $request->input('file_id'))
+                                        ->update([
+                                            'qualified' => !$qualified
+                                        ]);
+            return response()->json([
+                'status' => 'success',
+                'error' => false
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'error' => true
+            ]);
+        }
+        
+    }
+
+    public function qualifiedApprovalRequestFileAllRequire(Request $request) {
+        
+        // try {
+        //     $qualified = ApprovalRequestFileCriteria::where('id', $request->input('file_id'))->first()->toArray()['qualified'];
+        
+        //     ApprovalRequestFileCriteria::where('id', $request->input('file_id'))
+        //                                 ->update([
+        //                                     'qualified' => !$qualified
+        //                                 ]);
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'error' => false
+        //     ]);
+        // } catch (\Throwable $th) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'error' => true
+        //     ]);
+        // }
+        
     }
 }
